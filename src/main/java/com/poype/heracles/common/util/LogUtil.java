@@ -1,4 +1,4 @@
-package com.poype.common.util;
+package com.poype.heracles.common.util;
 
 import org.slf4j.Logger;
 

@@ -1,7 +1,7 @@
-package com.poype.common.exception;
+package com.poype.heracles.common.exception;
 
-import com.poype.common.dto.error.BizScene;
-import com.poype.common.enums.BusinessErrorCode;
+import com.poype.heracles.common.dto.error.BizScene;
+import com.poype.heracles.common.enums.BusinessErrorCode;
 
 public class BusinessException extends RuntimeException {
 

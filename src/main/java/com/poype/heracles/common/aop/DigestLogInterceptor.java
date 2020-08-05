@@ -1,6 +1,6 @@
-package com.poype.common.aop;
+package com.poype.heracles.common.aop;
 
-import com.poype.common.util.LogUtil;
+import com.poype.heracles.common.util.LogUtil;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.slf4j.Logger;

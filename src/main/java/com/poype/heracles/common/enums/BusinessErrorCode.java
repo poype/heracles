@@ -1,9 +1,9 @@
-package com.poype.common.enums;
+package com.poype.heracles.common.enums;
 
 import org.apache.commons.lang.StringUtils;
 
-import static com.poype.common.dto.error.ErrorLevel.ERROR;
-import static com.poype.common.dto.error.ErrorLevel.INFO;
+import static com.poype.heracles.common.dto.error.ErrorLevel.ERROR;
+import static com.poype.heracles.common.dto.error.ErrorLevel.INFO;
 
 public enum BusinessErrorCode {
 

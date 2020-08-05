@@ -1,6 +1,6 @@
-package com.poype.common.util;
+package com.poype.heracles.common.util;
 
-import com.poype.common.dto.error.BizScene;
+import com.poype.heracles.common.dto.error.BizScene;
 
 /**
  * 对多个ThreadLocal的一个封装，因为一个ThreadLocal对象只能为线程承载一个变量，所以ThreadLocalHolder可能会封装多个ThreadLocal

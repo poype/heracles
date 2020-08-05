@@ -1,4 +1,4 @@
-package com.poype.common.template;
+package com.poype.heracles.common.template;
 
 public abstract class ExecuteCallback {
 

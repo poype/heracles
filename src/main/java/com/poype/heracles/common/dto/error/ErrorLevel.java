@@ -1,4 +1,4 @@
-package com.poype.common.dto.error;
+package com.poype.heracles.common.dto.error;
 
 /**
  * 错误级别常量

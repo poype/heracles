@@ -1,6 +1,6 @@
-package com.poype.common.dto;
+package com.poype.heracles.common.dto;
 
-import com.poype.common.dto.error.CommonError;
+import com.poype.heracles.common.dto.error.CommonError;
 
 import java.io.Serializable;
 
