@@ -38,4 +38,9 @@ public class Sprint {
      * 与版本关联的应用
      */
     private List<ApplicationOfSprint> applications;
+
+    /**
+     * 该版本使用的SIT环境
+     */
+    private Environment sitEnv;
 }

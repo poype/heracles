@@ -3,6 +3,11 @@ package com.poype.heracles.core.domain.model;
 import com.poype.heracles.core.domain.model.enums.EnvironmentStatus;
 import com.poype.heracles.core.domain.model.enums.EnvironmentType;
 
+import java.util.List;
+
+/**
+ * 环境对象
+ */
 public class Environment {
 
     /**
@@ -11,9 +16,19 @@ public class Environment {
     private String environmentId;
 
     /**
+     * 环境名称
+     */
+    private String environmentName;
+
+    /**
      * 环境类型
      */
     private EnvironmentType environmentType;
+
+    /**
+     * 该环境下的所有应用
+     */
+    private List<ApplicationOfEnvironment> applications;
 
     /**
      * 该环境下应用的默认CPU资源
