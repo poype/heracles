@@ -1,4 +1,4 @@
-package com.poype.heracles.core.facade;
+package com.poype.heracles.core.facade.request;
 
 public class CheckGitAddrRequest {
 
