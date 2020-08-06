@@ -17,17 +17,7 @@ public enum BusinessErrorCode {
     /** system error */
     SYSTEM_ERROR("002", ERROR, "system error"),
 
-    /** 查询接口未找到记录 */
-    TARGET_NOT_FOUND("003", INFO, "target not found"),
-
-    /** 数据库存在脏数据 */
-    DB_DIRTY_DATA("004", ERROR, "there are dirty data in the database"),
-
-    /*********************用户信息相关错误码*********************/
-    USER_HAS_REGISTER("005", ERROR, "user has register"),
-
-    /*********************密码相关*********************/
-    PASSWORD_EXIST("006", ERROR, "password exit")
+    GIT_ADDR_ILLEGAL("003", INFO, "Git仓库地址不合法")
     ;
 
     private final String specificCode;

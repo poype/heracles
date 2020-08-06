@@ -1,5 +1,6 @@
 package com.poype.heracles.core.domain.model;
 
+import com.poype.heracles.core.domain.model.application.Application;
 import com.poype.heracles.core.domain.model.enums.ApplicationOfSprintStatus;
 
 import java.util.List;

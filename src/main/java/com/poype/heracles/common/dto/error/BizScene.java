@@ -2,11 +2,10 @@ package com.poype.heracles.common.dto.error;
 
 public enum BizScene {
 
-    /** 商户注册 */
-    MERCHANT_REGISTER("0001", "merchant register"),
+    /** 添加应用 */
+    ADD_APPLICATION("0001", "add application"),
 
-    /** 修改商户信息 */
-    UPDATE_MERCHANT("0002", "modify merchant");
+    CONFIRM_GIT_ADDR("0002", "confirm git addr");
 
     /** 场景编码 */
     private final String sceneCode;
