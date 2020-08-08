@@ -37,10 +37,66 @@ public class Sprint {
     /**
      * 与版本关联的应用
      */
-    private List<ApplicationOfSprint> applications;
+    private List<AppOfSprint> applications;
 
     /**
      * 该版本使用的SIT环境
      */
-    private Environment sitEnv;
+    private String sitEnvName;
+
+    public String getSprintId() {
+        return sprintId;
+    }
+
+    public void setSprintId(String sprintId) {
+        this.sprintId = sprintId;
+    }
+
+    public String getSprintName() {
+        return sprintName;
+    }
+
+    public void setSprintName(String sprintName) {
+        this.sprintName = sprintName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
+    public SprintStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(SprintStatus status) {
+        this.status = status;
+    }
+
+    public List<AppOfSprint> getApplications() {
+        return applications;
+    }
+
+    public void setApplications(List<AppOfSprint> applications) {
+        this.applications = applications;
+    }
+
+    public String getSitEnvName() {
+        return sitEnvName;
+    }
+
+    public void setSitEnvName(String sitEnvName) {
+        this.sitEnvName = sitEnvName;
+    }
 }

@@ -1,6 +1,6 @@
 package com.poype.heracles.core.domain.model.enums;
 
-public enum ApplicationOfSprintStatus {
+public enum AppOfSprintStatus {
     ;
 
     private int code;
@@ -9,7 +9,7 @@ public enum ApplicationOfSprintStatus {
 
     private String description;
 
-    ApplicationOfSprintStatus(int code, String name, String description) {
+    AppOfSprintStatus(int code, String name, String description) {
         this.code = code;
         this.name = name;
         this.description = description;

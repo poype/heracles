@@ -57,7 +57,7 @@ public class Application {
 
     public Application(String applicationName, String applicationType, String description, String codeRepository,
                        String devOwner, String qaOwner, String belongSystem, String belongBusiness) {
-        this.applicationId = IdUtil.generateApplicationId();
+        this.applicationId = IdUtil.generateBizId();
         this.applicationName = applicationName;
         this.applicationType = applicationType;
         this.description = description;

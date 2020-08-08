@@ -3,6 +3,9 @@ package com.poype.heracles.common.util;
 import com.poype.heracles.common.enums.BusinessErrorCode;
 import com.poype.heracles.common.exception.BusinessException;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.util.CollectionUtils;
+
+import java.util.Collection;
 
 public class AssertUtil {
 
@@ -69,6 +72,11 @@ public class AssertUtil {
 
     public static void notBlank(final String str, final BusinessErrorCode resultCode, final Object... objs) {
         isTrue(StringUtils.isNotBlank(str), resultCode, objs);
+    }
+
+    public static void notEmpty(final Collection collection, final BusinessErrorCode resultCode,
+                                final Object... objs) {
+        isTrue(!CollectionUtils.isEmpty(collection), resultCode, objs);
     }
 
     private static String getLogString(Object... objs) {

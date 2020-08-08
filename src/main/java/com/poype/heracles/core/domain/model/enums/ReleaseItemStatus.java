@@ -1,16 +1,13 @@
 package com.poype.heracles.core.domain.model.enums;
 
-/**
- * 发布状态
- */
-public enum ReleaseBaseOrderStatus {
-    ;
+public enum ReleaseItemStatus {
+    INIT(0, "INIT");
 
     private int code;
 
     private String name;
 
-    ReleaseBaseOrderStatus(int code, String name) {
+    ReleaseItemStatus(int code, String name) {
         this.code = code;
         this.name = name;
     }

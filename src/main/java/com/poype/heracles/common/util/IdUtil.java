@@ -10,7 +10,7 @@ public class IdUtil {
         return UUID.randomUUID().toString().replace("-", "").toLowerCase().substring(10);
     }
 
-    public static String generateApplicationId() {
+    public static String generateBizId() {
         return time() + generate22Id();
     }
 

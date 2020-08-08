@@ -17,7 +17,9 @@ public enum BusinessErrorCode {
     /** system error */
     SYSTEM_ERROR("002", ERROR, "system error"),
 
-    GIT_ADDR_ILLEGAL("003", INFO, "Git仓库地址不合法")
+    GIT_ADDR_ILLEGAL("003", INFO, "Git仓库地址不合法"),
+
+    RELEASE_ENV_ILLEGAL("004", INFO, "发布环境不合法")
     ;
 
     private final String specificCode;

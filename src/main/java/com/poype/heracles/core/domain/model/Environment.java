@@ -13,17 +13,12 @@ public class Environment {
     /**
      * 环境Id
      */
-    private String environmentId;
+    private String envId;
 
     /**
      * 环境名称
      */
-    private String environmentName;
-
-    /**
-     * 环境类型
-     */
-    private EnvironmentType environmentType;
+    private String envName;
 
     /**
      * 该环境下的所有应用
