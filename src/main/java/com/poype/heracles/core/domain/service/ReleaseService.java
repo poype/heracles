@@ -1,6 +1,7 @@
 package com.poype.heracles.core.domain.service;
 
 import com.poype.heracles.core.domain.model.AppOfRelease;
+import com.poype.heracles.core.domain.model.ReleaseOrder;
 import com.poype.heracles.core.domain.model.Sprint;
 
 import java.util.List;
@@ -43,4 +44,6 @@ public interface ReleaseService {
      */
     String createReleaseOrderByAppListAndEnv(List<AppOfRelease> appList, String releaseName,
                                              String description, String envName, String operator);
+
+    ReleaseOrder queryOrderStatus(String releaseOrderId);
 }

@@ -1,6 +1,7 @@
 package com.poype.heracles.core.domain.model;
 
 import com.poype.heracles.common.util.IdUtil;
+import com.poype.heracles.core.domain.model.enums.ReleaseItemStatus;
 import com.poype.heracles.core.domain.model.enums.ReleaseOrderStatus;
 
 import java.util.ArrayList;
@@ -51,6 +52,26 @@ public class ReleaseOrder {
      * 发布时间
      */
     private Date releaseDate;
+
+    public void updateItemStatus(String itemId, ReleaseItemStatus status) {
+        for (ReleaseItem item : this.releaseItems) {
+            if (item.getItemId().equals(itemId)) {
+                item.setStatus(status);
+                break;
+            }
+        }
+        boolean finishFlag = true;
+        for (ReleaseItem item : this.releaseItems) {
+            if (item.getStatus() == ReleaseItemStatus.PROCESSING
+                    || item.getStatus() == ReleaseItemStatus.INIT) {
+                finishFlag = false;
+                break;
+            }
+        }
+        if (finishFlag) {
+            this.status = ReleaseOrderStatus.FINISH;
+        }
+    }
 
     /**
      * 添加一个版本中的应用到发布单中

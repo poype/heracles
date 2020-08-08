@@ -11,4 +11,14 @@ public class ReleaseRepositoryImpl implements ReleaseRepository {
     public void saveReleaseOrder(ReleaseOrder releaseOrder) {
 
     }
+
+    @Override
+    public void updateReleaseOrder(ReleaseOrder releaseOrder) {
+
+    }
+
+    @Override
+    public ReleaseOrder queryByOrderId(String orderId) {
+        return null;
+    }
 }

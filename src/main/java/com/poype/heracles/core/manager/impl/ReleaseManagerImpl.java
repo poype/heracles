@@ -1,16 +1,21 @@
 package com.poype.heracles.core.manager.impl;
 
 import com.poype.heracles.core.domain.model.AppOfRelease;
+import com.poype.heracles.core.domain.model.ReleaseItem;
+import com.poype.heracles.core.domain.model.ReleaseOrder;
 import com.poype.heracles.core.domain.model.Sprint;
 import com.poype.heracles.core.domain.service.EventService;
 import com.poype.heracles.core.domain.service.ReleaseService;
 import com.poype.heracles.core.domain.service.SprintService;
+import com.poype.heracles.core.facade.result.ReleaseItemView;
+import com.poype.heracles.core.facade.result.ReleaseOrderView;
 import com.poype.heracles.core.manager.ReleaseManager;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,5 +60,25 @@ public class ReleaseManagerImpl implements ReleaseManager {
         eventService.sendReleaseOrderCreated(releaseOrderId);
 
         return releaseOrderId;
+    }
+
+    @Override
+    public ReleaseOrderView queryReleaseOrderStatus(String releaseOrderId) {
+        ReleaseOrder releaseOrder = releaseService.queryOrderStatus(releaseOrderId);
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+        ReleaseOrderView releaseOrderView = new ReleaseOrderView(releaseOrder.getOrderId(),
+                releaseOrder.getReleaseName(), releaseOrder.getDescription(), releaseOrder.getEnvName(),
+                releaseOrder.getStatus().getName(), releaseOrder.getOperator(),
+                formatter.format(releaseOrder.getReleaseDate()));
+
+        List<ReleaseItemView> itemViewList = new ArrayList<>();
+        for (ReleaseItem item : releaseOrder.getReleaseItems()) {
+            ReleaseItemView itemView = new ReleaseItemView(item.getItemId(), item.getAppName(),
+                    item.getCodeRepos(), item.getCodeBranch(), item.getStatus().getName());
+            itemViewList.add(itemView);
+        }
+        releaseOrderView.setItemList(itemViewList);
+        return releaseOrderView;
     }
 }

@@ -1,6 +1,7 @@
 package com.poype.heracles.core.manager;
 
 import com.poype.heracles.core.domain.model.AppOfRelease;
+import com.poype.heracles.core.facade.result.ReleaseOrderView;
 
 import java.util.List;
 
@@ -18,4 +19,10 @@ public interface ReleaseManager {
      */
     String createReleaseOrder(String sprintId, String releaseName, String description, String operator,
                               String envName, List<AppOfRelease> appList);
+
+    /**
+     * 查询发布单状态
+     * @param releaseOrderId 发布单Id
+     */
+    ReleaseOrderView queryReleaseOrderStatus(String releaseOrderId);
 }

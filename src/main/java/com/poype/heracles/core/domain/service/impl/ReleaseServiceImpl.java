@@ -2,14 +2,14 @@ package com.poype.heracles.core.domain.service.impl;
 
 import com.poype.heracles.common.enums.BusinessErrorCode;
 import com.poype.heracles.common.util.AssertUtil;
-import com.poype.heracles.core.domain.model.AppOfRelease;
-import com.poype.heracles.core.domain.model.AppOfSprint;
-import com.poype.heracles.core.domain.model.ReleaseOrder;
-import com.poype.heracles.core.domain.model.Sprint;
+import com.poype.heracles.core.domain.model.*;
 import com.poype.heracles.core.domain.model.application.Application;
+import com.poype.heracles.core.domain.model.enums.ReleaseItemStatus;
+import com.poype.heracles.core.domain.model.enums.ReleaseOrderStatus;
 import com.poype.heracles.core.domain.service.ReleaseService;
 import com.poype.heracles.core.repository.ApplicationRepository;
 import com.poype.heracles.core.repository.ReleaseRepository;
+import com.poype.heracles.core.repository.integration.ReleaseItemClient;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -23,6 +23,9 @@ public class ReleaseServiceImpl implements ReleaseService {
 
     @Resource
     private ApplicationRepository applicationRepository;
+
+    @Resource
+    private ReleaseItemClient releaseItemClient;
 
     @Override
     public String createReleaseOrderBySprint(Sprint sprint, String releaseName, String description,
@@ -68,6 +71,30 @@ public class ReleaseServiceImpl implements ReleaseService {
         }
         releaseRepository.saveReleaseOrder(releaseOrder);
         return releaseOrder.getOrderId();
+    }
+
+    @Override
+    public ReleaseOrder queryOrderStatus(String releaseOrderId) {
+        ReleaseOrder releaseOrder = releaseRepository.queryByOrderId(releaseOrderId);
+        if (releaseOrder.getStatus() == ReleaseOrderStatus.PROCESSING) {
+            List<ReleaseItem> releaseItems = releaseOrder.getReleaseItems();
+            boolean changeFlag = false;
+            for (ReleaseItem releaseItem : releaseItems) {
+                if (releaseItem.getStatus() == ReleaseItemStatus.PROCESSING) {
+                    // 远端查询最新状态
+                    ReleaseItemStatus status = releaseItemClient.queryStatus(releaseItem);
+
+                    if (status == ReleaseItemStatus.SUCCESS || status == ReleaseItemStatus.FAIL) {
+                        releaseOrder.updateItemStatus(releaseItem.getItemId(), status);
+                        changeFlag = true;
+                    }
+                }
+            }
+            if (changeFlag) {
+                releaseRepository.updateReleaseOrder(releaseOrder);
+            }
+        }
+        return releaseOrder;
     }
 
 

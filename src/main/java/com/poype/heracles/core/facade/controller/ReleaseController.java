@@ -7,7 +7,10 @@ import com.poype.heracles.common.util.AssertUtil;
 import com.poype.heracles.common.util.ThreadLocalHolder;
 import com.poype.heracles.core.domain.model.AppOfRelease;
 import com.poype.heracles.core.facade.request.CreateReleaseOrderRequest;
+import com.poype.heracles.core.facade.request.QueryReleaseOrderStatusRequest;
 import com.poype.heracles.core.facade.result.CreateReleaseOrderResult;
+import com.poype.heracles.core.facade.result.QueryReleaseOrderStatusResult;
+import com.poype.heracles.core.facade.result.ReleaseOrderView;
 import com.poype.heracles.core.manager.ReleaseManager;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
@@ -31,7 +34,7 @@ public class ReleaseController {
     @RequestMapping(value = "/create", method = RequestMethod.POST, produces = "application/json")
     public CreateReleaseOrderResult createReleaseOrder(final CreateReleaseOrderRequest request) {
 
-        ThreadLocalHolder.setBizScene(BizScene.ADD_APPLICATION);
+        ThreadLocalHolder.setBizScene(BizScene.RELEASE_ORDER_CREATE);
 
         final CreateReleaseOrderResult result = new CreateReleaseOrderResult();
 
@@ -64,5 +67,28 @@ public class ReleaseController {
         return result;
     }
 
+    @RequestMapping(value = "/queryStatus", method = RequestMethod.POST, produces = "application/json")
+    public QueryReleaseOrderStatusResult queryReleaseStatusByOrderId(final QueryReleaseOrderStatusRequest request) {
 
+        ThreadLocalHolder.setBizScene(BizScene.RELEASE_STATUS_QUERY);
+
+        final QueryReleaseOrderStatusResult result = new QueryReleaseOrderStatusResult();
+
+        executeTemplate.execute(result, new ExecuteCallback() {
+
+            @Override
+            public void check() {
+                AssertUtil.notBlank(request.getReleaseOrderId(), PARAM_ILLEGAL, "发布单Id不能为空");
+            }
+
+            @Override
+            public void doService() {
+                ReleaseOrderView releaseOrderView = releaseManager.queryReleaseOrderStatus(
+                        request.getReleaseOrderId());
+                result.setReleaseOrderView(releaseOrderView);
+            }
+        });
+
+        return result;
+    }
 }
