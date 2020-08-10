@@ -5,7 +5,7 @@ public enum BizScene {
     /** 添加应用 */
     ADD_APPLICATION("0001", "add application"),
 
-    CONFIRM_GIT_ADDR("0002", "confirm git addr"),
+    QUERY_APPLICATION("0002", "confirm git addr"),
 
     RELEASE_ORDER_CREATE("0003", "create release order"),
 

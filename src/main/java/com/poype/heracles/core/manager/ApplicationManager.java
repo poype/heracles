@@ -1,5 +1,7 @@
 package com.poype.heracles.core.manager;
 
+import com.poype.heracles.core.domain.model.application.Application;
+
 import java.util.List;
 
 public interface ApplicationManager {
@@ -21,9 +23,10 @@ public interface ApplicationManager {
                                    List<String> hostConfigNames);
 
     /**
-     * 确定git地址是否存在
-     * @param url 代码url
-     * @return 校验结果
+     * 应用查询，既支持单个应用查询，也支持批量查询
+     * @param appId appId
+     * @param pageNum pageNum
+     * @return 应用列表
      */
-    void checkGitAddr(String url);
+    List<Application> queryApplications(String appId, int pageNum);
 }

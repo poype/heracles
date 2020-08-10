@@ -6,14 +6,19 @@ import com.poype.heracles.common.template.ExecuteCallback;
 import com.poype.heracles.common.template.ExecuteTemplate;
 import com.poype.heracles.common.util.AssertUtil;
 import com.poype.heracles.common.util.ThreadLocalHolder;
+import com.poype.heracles.core.domain.model.application.Application;
 import com.poype.heracles.core.facade.request.AddApplicationRequest;
-import com.poype.heracles.core.facade.request.CheckGitAddrRequest;
+import com.poype.heracles.core.facade.request.QueryApplicationRequest;
+import com.poype.heracles.core.facade.result.QueryApplicationResult;
 import com.poype.heracles.core.manager.ApplicationManager;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.annotation.Resource;
+
+import java.util.List;
 
 import static com.poype.heracles.common.enums.BusinessErrorCode.PARAM_ILLEGAL;
 
@@ -61,28 +66,30 @@ public class ApplicationController {
         return result;
     }
 
-    @RequestMapping(value = "/check_git", method = RequestMethod.POST, produces = "application/json")
-    public BaseResult checkGitAddr(CheckGitAddrRequest request) {
+    @RequestMapping(value = "/query", method = RequestMethod.POST, produces = "application/json")
+    public QueryApplicationResult query(QueryApplicationRequest request) {
 
-        ThreadLocalHolder.setBizScene(BizScene.CONFIRM_GIT_ADDR);
+        ThreadLocalHolder.setBizScene(BizScene.QUERY_APPLICATION);
 
-        final BaseResult result = new BaseResult();
+        final QueryApplicationResult result = new QueryApplicationResult();
 
         executeTemplate.execute(result, new ExecuteCallback() {
 
             @Override
             public void check() {
-                AssertUtil.notBlank(request.getGitAddrUrl(), PARAM_ILLEGAL, "Git地址不能为空");
+                AssertUtil.isTrue(StringUtils.isNotBlank(request.getAppId()) || request.getPageNum() > 0,
+                        PARAM_ILLEGAL, "参数不合法");
             }
 
             @Override
             public void doService() {
-                applicationManager.checkGitAddr(request.getGitAddrUrl());
+                List<Application> appList =
+                        applicationManager.queryApplications(request.getAppId(), request.getPageNum());
+                result.setAppList(appList);
             }
         });
 
         return result;
-
     }
 
 }

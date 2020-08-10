@@ -19,5 +19,15 @@ public class ApplicationRepositoryImpl implements ApplicationRepository {
         return null;
     }
 
+    @Override
+    public Application queryByAppId(String appId) {
+        return null;
+    }
+
+    @Override
+    public List<Application> queryPage(int pageNum) {
+        return null;
+    }
+
 
 }

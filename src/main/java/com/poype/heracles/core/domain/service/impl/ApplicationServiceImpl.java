@@ -3,15 +3,15 @@ package com.poype.heracles.core.domain.service.impl;
 import com.poype.heracles.core.domain.model.application.Application;
 import com.poype.heracles.core.domain.service.ApplicationService;
 import com.poype.heracles.core.repository.ApplicationRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 @Service("applicationService")
 public class ApplicationServiceImpl implements ApplicationService {
 
-    @Autowired
+    @Resource
     private ApplicationRepository applicationRepository;
 
     @Override
