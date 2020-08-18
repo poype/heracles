@@ -1,5 +1,7 @@
 package com.poype.heracles.core.facade.request;
 
+import com.poype.heracles.core.domain.model.dto.AppOfSprintDto;
+
 import java.util.List;
 
 public class CreateNewSprintRequest {
@@ -22,7 +24,7 @@ public class CreateNewSprintRequest {
     /**
      * 相关应用
      */
-    private List<String> apps;
+    private List<AppOfSprintDto> apps;
 
     @Override
     public String toString() {
@@ -58,11 +60,11 @@ public class CreateNewSprintRequest {
         this.releaseDate = releaseDate;
     }
 
-    public List<String> getApps() {
+    public List<AppOfSprintDto> getApps() {
         return apps;
     }
 
-    public void setApps(List<String> apps) {
+    public void setApps(List<AppOfSprintDto> apps) {
         this.apps = apps;
     }
 }

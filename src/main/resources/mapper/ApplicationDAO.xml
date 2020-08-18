@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.poype.heracles.core.repository.dao.ApplicationDAO">
+
+    <resultMap id="application_result_map" type="com.poype.heracles.core.repository.dao.model.ApplicationDO">
+        <result column="application_id" property="applicationId"/>
+        <result column="domain_id" property="domainId"/>
+        <result column="application_name" property="applicationName"/>
+        <result column="application_type" property="applicationType"/>
+        <result column="description" property="description"/>
+        <result column="code_repository" property="codeRepository"/>
+        <result column="dev_owner" property="devOwner"/>
+        <result column="devs" property="devs"/>
+        <result column="qa_owner" property="qaOwner"/>
+        <result column="qas" property="qas"/>
+        <result column="belong_system" property="belongSystem"/>
+        <result column="belong_business" property="belongBusiness"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <resultMap id="application_config_result_map" type="com.poype.heracles.core.repository.dao.model.ApplicationConfigDO">
+        <result column="config_id" property="configId"/>
+        <result column="application_id" property="applicationId"/>
+        <result column="config_type" property="configType"/>
+        <result column="config_value" property="configValue"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+    
+    <resultMap id="java_application_result_map" type="com.poype.heracles.core.repository.dao.model.JavaApplicationDO">
+        <result column="application_id" property="applicationId"/>
+        <result column="base_code_branch" property="baseCodeBranch"/>
+        <result column="config_file_path" property="configFilePath"/>
+        <result column="jar_path" property="jarPath"/>
+        <result column="pom_path" property="pomPath"/>
+        <result column="mvn_command" property="mvnCommand"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+    
+    <insert id="saveApplication" parameterType="com.poype.heracles.core.repository.dao.model.ApplicationDO">
+        insert into application(application_id, domain_id, application_name, application_type, description,
+        code_repository, dev_owner, devs, qa_owner, qas, belong_system, belong_business, create_time, update_time)
+        values (#{applicationId}, #{domainId}, #{applicationName}, #{applicationType}, #{description},
+        #{codeRepository}, #{devOwner}, #{devs}, #{qaOwner}, #{qas}, #{belongSystem}, #{belongBusiness}, now(), now())
+    </insert>
+
+    <insert id="saveJavaApplication" parameterType="com.poype.heracles.core.repository.dao.model.JavaApplicationDO">
+        insert into java_application(application_id, base_code_branch, config_file_path, jar_path, pom_path,
+        mvn_command, create_time, update_time)
+        values (#{applicationId}, #{baseCodeBranch}, #{configFilePath}, #{jarPath}, #{pomPath},
+        #{mvnCommand}, now(), now())
+    </insert>
+
+    <insert id="saveApplicationConfig" parameterType="com.poype.heracles.core.repository.dao.model.ApplicationConfigDO">
+        insert into application_config(config_id, application_id, config_type, config_value, create_time, update_time)
+        values (#{configId}, #{applicationId}, #{configType}, #{configValue}, now(), now());
+    </insert>
+
+    <select id="queryApplicationById" resultMap="application_result_map">
+        select * from application where application_id = #{applicationId}
+    </select>
+
+    <select id="queryPageOfApplication" resultMap="application_result_map">
+        select * from application limit #{offset}, 10;
+    </select>
+
+    <select id="queryJavaApplicationById" resultMap="java_application_result_map">
+        select * from java_application where application_id = #{applicationId}
+    </select>
+
+    <select id="queryConfigListByAppId" resultMap="application_config_result_map">
+        select * from application_config where application_id = #{applicationId}
+    </select>
+
+    <select id="queryApplicationByName" resultMap="application_result_map">
+        select * from application where application_name = #{applicationName}
+    </select>
+</mapper>

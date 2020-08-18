@@ -1,0 +1,27 @@
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+
+spring:
+  aop:
+    auto: true
+  profiles:
+    active: dev
+  application:
+    name: heracles
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.1.8:3306/heracles
+    username: root
+    password: ldl313
+    hikari:
+      minimum-idle: 10
+      maximum-pool-size: 20
+      connection-timeout: 3000
+
+server:
+  port: 8080
+
+logging:
+  level:
+    root: info
+

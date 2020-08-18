@@ -2,7 +2,7 @@ package com.poype.heracles.core.domain.service;
 
 import com.poype.heracles.core.domain.model.AppOfRelease;
 import com.poype.heracles.core.domain.model.ReleaseOrder;
-import com.poype.heracles.core.domain.model.Sprint;
+import com.poype.heracles.core.domain.model.sprint.Sprint;
 
 import java.util.List;
 

@@ -15,11 +15,21 @@ public enum BusinessErrorCode {
     PARAM_ILLEGAL("001", ERROR, "param illegal"),
 
     /** system error */
-    SYSTEM_ERROR("002", ERROR, "system error"),
+    SYSTEM_ERROR("999", ERROR, "system error"),
 
     GIT_ADDR_ILLEGAL("003", INFO, "Git仓库地址不合法"),
 
-    RELEASE_ENV_ILLEGAL("004", INFO, "发布环境不合法")
+    RELEASE_ENV_ILLEGAL("004", INFO, "发布环境不合法"),
+
+    GIT_PUSH_ERROR("005", INFO, "GIT PUSH ERROR"),
+
+    GIT_CLONE_ERROR("006", INFO, "GIT CLONE ERROR"),
+
+    GIT_PULL_ERROR("007", INFO, "GIT PULL ERROR"),
+
+    GIT_CREATE_BRANCH_ERROR("008", INFO, "GIT CREATE BRANCH ERROR"),
+
+    DUPLICATE_APP_NAME("009", INFO, "DUPLICATE APP NAME"),
     ;
 
     private final String specificCode;

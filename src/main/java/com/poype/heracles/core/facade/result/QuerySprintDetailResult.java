@@ -1,11 +1,13 @@
 package com.poype.heracles.core.facade.result;
 
+import com.poype.heracles.common.dto.BaseResult;
+
 import java.util.List;
 
 /**
  * 查询版本详情result
  */
-public class QuerySprintDetailResult {
+public class QuerySprintDetailResult extends BaseResult {
 
     /**
      * 版本Id

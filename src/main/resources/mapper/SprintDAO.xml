@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.poype.heracles.core.repository.dao.SprintDAO">
+
+    <resultMap id="sprint_result_map" type="com.poype.heracles.core.repository.dao.model.SprintDO">
+        <result column="sprint_id" property="sprintId"/>
+        <result column="sprint_name" property="sprintName"/>
+        <result column="description" property="description"/>
+        <result column="release_date" property="releaseDate"/>
+        <result column="status" property="status"/>
+        <result column="sit_env_name" property="sitEnvName"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <resultMap id="app_of_sprint_result_map" type="com.poype.heracles.core.repository.dao.model.AppOfSprintDO">
+        <result column="relation_id" property="relationId"/>
+        <result column="sprint_id" property="sprintId"/>
+        <result column="app" property="app"/>
+        <result column="app_type" property="appType"/>
+        <result column="code_repository" property="codeRepository"/>
+        <result column="code_branch" property="codeBranch"/>
+        <result column="dev_s" property="devS"/>
+        <result column="qa_s" property="qaS"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <insert id="saveSprint" parameterType="com.poype.heracles.core.repository.dao.model.SprintDO">
+        insert into sprint(sprint_id, sprint_name, description, release_date, status, sit_env_name, create_time, update_time)
+        values (#{sprintId}, #{sprintName}, #{description}, #{releaseDate}, #{status}, #{sitEnvName}, now(), now());
+    </insert>
+
+    <insert id="saveAppOfSprint" parameterType="com.poype.heracles.core.repository.dao.model.AppOfSprintDO">
+        insert into app_of_sprint(relation_id, sprint_id, app, app_type, code_repository, code_branch, dev_s, qa_s,
+        status, create_time, update_time)
+        values (#{relationId}, #{sprintId}, #{app}, #{appType}, #{codeRepository}, #{codeBranch}, #{devS}, #{qaS},
+        #{status}, now(), now())
+    </insert>
+
+</mapper>

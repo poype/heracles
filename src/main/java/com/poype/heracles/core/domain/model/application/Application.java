@@ -1,6 +1,11 @@
 package com.poype.heracles.core.domain.model.application;
 
 import com.poype.heracles.common.util.IdUtil;
+import com.poype.heracles.core.domain.model.application.config.ApplicationConfig;
+import com.poype.heracles.core.domain.model.enums.ApplicationType;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * 应用
@@ -13,6 +18,11 @@ public class Application {
     private String applicationId;
 
     /**
+     * 应用所属域Id
+     */
+    private String domainId;
+
+    /**
      * 应用名字
      */
     private String applicationName;
@@ -20,7 +30,7 @@ public class Application {
     /**
      * 应用类型
      */
-    private String applicationType;
+    private ApplicationType applicationType;
 
     /**
      * 应用描述
@@ -38,9 +48,19 @@ public class Application {
     private String devOwner;
 
     /**
+     * 开发成员
+     */
+    private Set<String> devSet;
+
+    /**
      * 测试owner
      */
     private String qaOwner;
+
+    /**
+     * 测试成员
+     */
+    private Set<String> qaSet;
 
     /**
      * 所属子系统
@@ -52,12 +72,19 @@ public class Application {
      */
     private String belongBusiness;
 
+    /**
+     * 与应用相关的配置列表
+     */
+    private List<ApplicationConfig> configs;
+
     public Application() {
     }
 
-    public Application(String applicationName, String applicationType, String description, String codeRepository,
-                       String devOwner, String qaOwner, String belongSystem, String belongBusiness) {
+    public Application(String domainId, String applicationName, ApplicationType applicationType, String description,
+                       String codeRepository, String devOwner, Set<String> devSet, String qaOwner, Set<String> qaSet,
+                       String belongSystem, String belongBusiness, List<ApplicationConfig> configs) {
         this.applicationId = IdUtil.generateBizId();
+        this.domainId = domainId;
         this.applicationName = applicationName;
         this.applicationType = applicationType;
         this.description = description;
@@ -66,6 +93,9 @@ public class Application {
         this.qaOwner = qaOwner;
         this.belongSystem = belongSystem;
         this.belongBusiness = belongBusiness;
+        this.configs = configs;
+        this.devSet = devSet;
+        this.qaSet = qaSet;
     }
 
     public String getApplicationId() {
@@ -84,11 +114,11 @@ public class Application {
         this.applicationName = applicationName;
     }
 
-    public String getApplicationType() {
+    public ApplicationType getApplicationType() {
         return applicationType;
     }
 
-    public void setApplicationType(String applicationType) {
+    public void setApplicationType(ApplicationType applicationType) {
         this.applicationType = applicationType;
     }
 
@@ -138,5 +168,37 @@ public class Application {
 
     public void setBelongBusiness(String belongBusiness) {
         this.belongBusiness = belongBusiness;
+    }
+
+    public String getDomainId() {
+        return domainId;
+    }
+
+    public void setDomainId(String domainId) {
+        this.domainId = domainId;
+    }
+
+    public List<ApplicationConfig> getConfigs() {
+        return configs;
+    }
+
+    public void setConfigs(List<ApplicationConfig> configs) {
+        this.configs = configs;
+    }
+
+    public Set<String> getDevSet() {
+        return devSet;
+    }
+
+    public void setDevSet(Set<String> devSet) {
+        this.devSet = devSet;
+    }
+
+    public Set<String> getQaSet() {
+        return qaSet;
+    }
+
+    public void setQaSet(Set<String> qaSet) {
+        this.qaSet = qaSet;
     }
 }

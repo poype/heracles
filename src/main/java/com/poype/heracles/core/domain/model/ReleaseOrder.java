@@ -3,6 +3,7 @@ package com.poype.heracles.core.domain.model;
 import com.poype.heracles.common.util.IdUtil;
 import com.poype.heracles.core.domain.model.enums.ReleaseItemStatus;
 import com.poype.heracles.core.domain.model.enums.ReleaseOrderStatus;
+import com.poype.heracles.core.domain.model.sprint.AppOfSprint;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -77,9 +78,9 @@ public class ReleaseOrder {
      * 添加一个版本中的应用到发布单中
      * @param appOfSprint 版本中的应用
      */
-    public void addAppToRelease(AppOfSprint appOfSprint) {
-        ReleaseItem item = new ReleaseItem(this.orderId, appOfSprint.getApp().getApplicationName(),
-                appOfSprint.getApp().getCodeRepository(), appOfSprint.getCodeBranch());
+    public void addAppToRelease(AppOfSprint appOfSprint, String codeRepository) {
+        ReleaseItem item = new ReleaseItem(this.orderId, appOfSprint.getApp(), codeRepository,
+                appOfSprint.getCodeBranch());
         this.releaseItems.add(item);
     }
 

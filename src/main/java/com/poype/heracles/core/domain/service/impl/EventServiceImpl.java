@@ -10,4 +10,14 @@ public class EventServiceImpl implements EventService {
     public void sendReleaseOrderCreated(String releaseOrderId) {
 
     }
+
+    @Override
+    public void sendApplicationCreated(String applicationId) {
+
+    }
+
+    @Override
+    public void sendSprintCreated(String sprintId) {
+
+    }
 }

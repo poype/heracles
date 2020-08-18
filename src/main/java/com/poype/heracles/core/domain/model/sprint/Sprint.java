@@ -1,5 +1,6 @@
-package com.poype.heracles.core.domain.model;
+package com.poype.heracles.core.domain.model.sprint;
 
+import com.poype.heracles.common.util.IdUtil;
 import com.poype.heracles.core.domain.model.enums.SprintStatus;
 
 import java.util.List;
@@ -43,6 +44,17 @@ public class Sprint {
      * 该版本使用的SIT环境
      */
     private String sitEnvName;
+
+    public Sprint(String sprintName, String description, String releaseDate, List<AppOfSprint> applications,
+                  String sitEnvName) {
+        this.sprintId = IdUtil.generateBizId();
+        this.status = SprintStatus.START;
+        this.sprintName = sprintName;
+        this.description = description;
+        this.releaseDate = releaseDate;
+        this.applications = applications;
+        this.sitEnvName = sitEnvName;
+    }
 
     public String getSprintId() {
         return sprintId;

@@ -20,7 +20,7 @@ public class LogUtil {
 
     public static void info(Logger logger, Object... obj) {
         if (logger.isInfoEnabled()) {
-            logger.debug(getLogString(obj));
+            logger.info(getLogString(obj));
         }
     }
 

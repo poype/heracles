@@ -3,7 +3,7 @@ package com.poype.heracles.core.manager.impl;
 import com.poype.heracles.core.domain.model.AppOfRelease;
 import com.poype.heracles.core.domain.model.ReleaseItem;
 import com.poype.heracles.core.domain.model.ReleaseOrder;
-import com.poype.heracles.core.domain.model.Sprint;
+import com.poype.heracles.core.domain.model.sprint.Sprint;
 import com.poype.heracles.core.domain.service.EventService;
 import com.poype.heracles.core.domain.service.ReleaseService;
 import com.poype.heracles.core.domain.service.SprintService;

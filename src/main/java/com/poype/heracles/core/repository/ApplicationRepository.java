@@ -1,16 +1,18 @@
 package com.poype.heracles.core.repository;
 
 import com.poype.heracles.core.domain.model.application.Application;
+import com.poype.heracles.core.domain.model.application.JavaApplication;
+import com.poype.heracles.core.domain.model.dto.SimpleApplicationDto;
 
 import java.util.List;
 
 public interface ApplicationRepository {
 
     /**
-     * 添加应用基本信息
-     * @param application 应用模型
+     * 添加java应用
+     * @param javaApplication java应用模型
      */
-    void addApplicationBasicInfo(Application application);
+    void addJavaApplication(JavaApplication javaApplication);
 
     /**
      * 根据应用名字查询应用模型
@@ -31,5 +33,5 @@ public interface ApplicationRepository {
      * @param pageNum 页号
      * @return 应用列表
      */
-    List<Application> queryPage(int pageNum);
+    List<SimpleApplicationDto> queryPage(int pageNum);
 }

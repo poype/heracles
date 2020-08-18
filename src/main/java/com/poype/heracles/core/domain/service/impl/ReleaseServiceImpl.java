@@ -6,6 +6,8 @@ import com.poype.heracles.core.domain.model.*;
 import com.poype.heracles.core.domain.model.application.Application;
 import com.poype.heracles.core.domain.model.enums.ReleaseItemStatus;
 import com.poype.heracles.core.domain.model.enums.ReleaseOrderStatus;
+import com.poype.heracles.core.domain.model.sprint.AppOfSprint;
+import com.poype.heracles.core.domain.model.sprint.Sprint;
 import com.poype.heracles.core.domain.service.ReleaseService;
 import com.poype.heracles.core.repository.ApplicationRepository;
 import com.poype.heracles.core.repository.ReleaseRepository;
@@ -36,7 +38,8 @@ public class ReleaseServiceImpl implements ReleaseService {
 
         List<AppOfSprint> appOfSprintList = sprint.getApplications();
         for (AppOfSprint appOfSprint : appOfSprintList) {
-            releaseOrder.addAppToRelease(appOfSprint);
+            Application application = applicationRepository.queryByAppName(appOfSprint.getApp());
+            releaseOrder.addAppToRelease(appOfSprint, application.getCodeRepository());
         }
         releaseRepository.saveReleaseOrder(releaseOrder);
         return releaseOrder.getOrderId();
@@ -51,8 +54,9 @@ public class ReleaseServiceImpl implements ReleaseService {
 
         List<AppOfSprint> appOfSprintList = sprint.getApplications();
         for (AppOfSprint appOfSprint : appOfSprintList) {
-            if (appList.contains(appOfSprint.getApp().getApplicationName())) {
-                releaseOrder.addAppToRelease(appOfSprint);
+            if (appList.contains(appOfSprint.getApp())) {
+                Application application = applicationRepository.queryByAppName(appOfSprint.getApp());
+                releaseOrder.addAppToRelease(appOfSprint, application.getCodeRepository());
             }
         }
         releaseRepository.saveReleaseOrder(releaseOrder);
