@@ -77,4 +77,10 @@
     <select id="queryApplicationByName" resultMap="application_result_map">
         select * from application where application_name = #{applicationName}
     </select>
+
+    <update id="updateJavaApplication" parameterType="com.poype.heracles.core.repository.dao.model.JavaApplicationDO">
+        update java_application set base_code_branch = #{baseCodeBranch}, config_file_path = #{configFilePath},
+        jar_path = #{jarPath}, pom_path = #{pomPath}, mvn_command = #{mvnCommand}, update_time = now()
+        where application_id = #{applicationId}
+    </update>
 </mapper>

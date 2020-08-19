@@ -18,7 +18,7 @@ import com.poype.heracles.core.domain.model.enums.ApplicationType;
 import com.poype.heracles.core.domain.model.enums.EnvironmentType;
 import com.poype.heracles.core.domain.model.enums.HardwareLevelEnum;
 import com.poype.heracles.core.facade.request.AddApplicationRequest;
-import com.poype.heracles.core.facade.request.QueryApplicationRequest;
+import com.poype.heracles.core.facade.request.UpdateJavaAppInfoRequest;
 import com.poype.heracles.core.facade.result.CreateApplicationResult;
 import com.poype.heracles.core.facade.result.QueryApplicationDetailResult;
 import com.poype.heracles.core.facade.result.QueryApplicationSimpleListResult;
@@ -28,7 +28,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import static com.poype.heracles.common.enums.BusinessErrorCode.PARAM_ILLEGAL;
 
@@ -68,28 +70,7 @@ public class ApplicationController {
                 AssertUtil.notBlank(request.getGitUrl(), PARAM_ILLEGAL, "代码仓库地址不能为空");
 
                 if (ApplicationType.getByName(request.getAppType()) == ApplicationType.JAVA) {
-                    AssertUtil.notNull(request.getJavaAppInfo(), PARAM_ILLEGAL, "缺少Java应用必要信息");
-
-                    Map<String, String> hardwareLevels = request.getJavaAppInfo().getHardwareLevels();
-                    if (!hardwareLevels.isEmpty()) {
-                        for (Map.Entry<String, String> entry : request.getJavaAppInfo().getHardwareLevels().entrySet()) {
-                            AssertUtil.isTrue(EnvironmentType.getByName(entry.getKey()) != null, PARAM_ILLEGAL,
-                                    "环境名称不正确");
-                            AssertUtil.isTrue(HardwareLevelEnum.getByName(entry.getValue()) != null, PARAM_ILLEGAL,
-                                    "环境级别不合法");
-                        }
-                    }
-
-                    AssertUtil.notBlank(request.getJavaAppInfo().getBaseCodeBranch(), PARAM_ILLEGAL,
-                            "baseCodeBranch不能为空");
-                    AssertUtil.notBlank(request.getJavaAppInfo().getConfigFilePath(), PARAM_ILLEGAL,
-                            "configFilePath不能为空");
-                    AssertUtil.notBlank(request.getJavaAppInfo().getJarPath(), PARAM_ILLEGAL,
-                            "jarPath不能为空");
-                    AssertUtil.notBlank(request.getJavaAppInfo().getPomPath(), PARAM_ILLEGAL,
-                            "pomPath不能为空");
-                    AssertUtil.notBlank(request.getJavaAppInfo().getMvnCommand(), PARAM_ILLEGAL,
-                            "mvnCommand不能为空");
+                    checkJavaAppInfo(request.getJavaAppInfo());
                 }
             }
 
@@ -108,7 +89,7 @@ public class ApplicationController {
 
     @RequestMapping(value = "/queryDetail", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
-    public QueryApplicationDetailResult queryDetail(@RequestBody final QueryApplicationRequest request) {
+    public QueryApplicationDetailResult queryDetail(@RequestBody final String appId) {
 
         ThreadLocalHolder.setBizScene(BizScene.QUERY_APPLICATION_DETAIL);
 
@@ -118,13 +99,13 @@ public class ApplicationController {
 
             @Override
             public void check() {
-                AssertUtil.notBlank(request.getAppId(), PARAM_ILLEGAL, "appId不能为空");
+                AssertUtil.notBlank(appId, PARAM_ILLEGAL, "appId不能为空");
             }
 
             @Override
             public void doService() {
                 Application app =
-                        applicationManager.queryApplicationDetailById(request.getAppId());
+                        applicationManager.queryApplicationDetailById(appId);
 
                 JavaApplication javaApp = (JavaApplication) app;
                 JavaApplicationDto javaApplicationDto = new JavaApplicationDto();
@@ -164,7 +145,7 @@ public class ApplicationController {
 
     @RequestMapping(value = "/querySimpleList", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
-    public QueryApplicationSimpleListResult querySimpleList(@RequestBody final QueryApplicationRequest request) {
+    public QueryApplicationSimpleListResult querySimpleList(@RequestBody final int pageNum) {
 
         ThreadLocalHolder.setBizScene(BizScene.QUERY_APPLICATION_SIMPLE_LIST);
 
@@ -174,12 +155,12 @@ public class ApplicationController {
 
             @Override
             public void check() {
-                AssertUtil.isTrue(request.getPageNum() > 0, PARAM_ILLEGAL);
+                AssertUtil.isTrue(pageNum > 0, PARAM_ILLEGAL);
             }
 
             @Override
             public void doService() {
-                List<SimpleApplicationDto> appList = applicationManager.querySimpleAppList(request.getPageNum());
+                List<SimpleApplicationDto> appList = applicationManager.querySimpleAppList(pageNum);
                 result.setAppList(appList);
             }
         });
@@ -211,4 +192,52 @@ public class ApplicationController {
         return result;
     }
 
+    @RequestMapping(value = "/updateJavaAppInfo", method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public BaseResult updateJavaAppInfo(@RequestBody UpdateJavaAppInfoRequest request) {
+
+        ThreadLocalHolder.setBizScene(BizScene.UPDATE_JAVA_APP_INFO);
+
+        final BaseResult result = new BaseResult();
+
+        executeTemplate.execute(result, new ExecuteCallback() {
+
+            @Override
+            public void check() {
+                AssertUtil.notBlank(request.getAppId(), PARAM_ILLEGAL);
+                checkJavaAppInfo(request.getJavaAppInfo());
+            }
+
+            @Override
+            public void doService() {
+                applicationManager.updateJavaAppInfo(request.getAppId(), request.getJavaAppInfo());
+            }
+        });
+
+        return result;
+    }
+
+    private void checkJavaAppInfo(JavaApplicationDto javaAppInfo) {
+        AssertUtil.notNull(javaAppInfo, PARAM_ILLEGAL, "缺少Java应用必要信息");
+
+        Map<String, String> hardwareLevels = javaAppInfo.getHardwareLevels();
+        if (!hardwareLevels.isEmpty()) {
+            for (Map.Entry<String, String> entry : javaAppInfo.getHardwareLevels().entrySet()) {
+                AssertUtil.isTrue(EnvironmentType.getByName(entry.getKey()) != null, PARAM_ILLEGAL,
+                        "环境名称不正确");
+                AssertUtil.isTrue(HardwareLevelEnum.getByName(entry.getValue()) != null, PARAM_ILLEGAL,
+                        "环境级别不合法");
+            }
+        }
+        AssertUtil.notBlank(javaAppInfo.getBaseCodeBranch(), PARAM_ILLEGAL,
+                "baseCodeBranch不能为空");
+        AssertUtil.notBlank(javaAppInfo.getConfigFilePath(), PARAM_ILLEGAL,
+                "configFilePath不能为空");
+        AssertUtil.notBlank(javaAppInfo.getJarPath(), PARAM_ILLEGAL,
+                "jarPath不能为空");
+        AssertUtil.notBlank(javaAppInfo.getPomPath(), PARAM_ILLEGAL,
+                "pomPath不能为空");
+        AssertUtil.notBlank(javaAppInfo.getMvnCommand(), PARAM_ILLEGAL,
+                "mvnCommand不能为空");
+    }
 }

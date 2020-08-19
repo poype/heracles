@@ -49,4 +49,9 @@ public class ApplicationManagerImpl implements ApplicationManager {
     public List<SimpleApplicationDto> querySimpleAppList(int pageNum) {
         return applicationRepository.queryPage(pageNum);
     }
+
+    @Override
+    public void updateJavaAppInfo(String appId, JavaApplicationDto javaAppInfo) {
+        applicationRepository.updateJavaAppInfo(appId, javaAppInfo);
+    }
 }

@@ -37,4 +37,11 @@ public interface ApplicationManager {
      * @return 分页号
      */
     List<SimpleApplicationDto> querySimpleAppList(int pageNum);
+
+    /**
+     * 更新应用的Java部分信息
+     * @param appId 应用Id
+     * @param javaAppInfo java部分信息
+     */
+    void updateJavaAppInfo(String appId, JavaApplicationDto javaAppInfo);
 }

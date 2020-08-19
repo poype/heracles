@@ -30,6 +30,8 @@ public enum BusinessErrorCode {
     GIT_CREATE_BRANCH_ERROR("008", INFO, "GIT CREATE BRANCH ERROR"),
 
     DUPLICATE_APP_NAME("009", INFO, "DUPLICATE APP NAME"),
+
+    APP_NOT_FOUND("010", INFO, "APP NOT FOUND"),
     ;
 
     private final String specificCode;

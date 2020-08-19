@@ -28,4 +28,6 @@ public interface ApplicationDAO {
     JavaApplicationDO queryJavaApplicationById(@Param("applicationId") String applicationId);
 
     List<ApplicationConfigDO> queryConfigListByAppId(@Param("applicationId") String applicationId);
+
+    void updateJavaApplication(JavaApplicationDO javaApplicationDO);
 }

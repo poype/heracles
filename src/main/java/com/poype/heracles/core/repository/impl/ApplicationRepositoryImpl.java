@@ -6,6 +6,7 @@ import com.poype.heracles.common.util.AssertUtil;
 import com.poype.heracles.core.domain.model.application.Application;
 import com.poype.heracles.core.domain.model.application.JavaApplication;
 import com.poype.heracles.core.domain.model.application.config.ApplicationConfig;
+import com.poype.heracles.core.domain.model.dto.JavaApplicationDto;
 import com.poype.heracles.core.domain.model.dto.SimpleApplicationDto;
 import com.poype.heracles.core.domain.model.enums.ApplicationConfigTypeEnum;
 import com.poype.heracles.core.domain.model.enums.ApplicationType;
@@ -80,6 +81,20 @@ public class ApplicationRepositoryImpl implements ApplicationRepository {
             applicationList.add(simpleApplicationDto);
         }
         return applicationList;
+    }
+
+    @Override
+    public void updateJavaAppInfo(String appId, JavaApplicationDto javaAppInfo) {
+        JavaApplicationDO javaApplicationDO = applicationDAO.queryJavaApplicationById(appId);
+        AssertUtil.notNull(javaApplicationDO, BusinessErrorCode.APP_NOT_FOUND);
+
+        javaApplicationDO.setBaseCodeBranch(javaAppInfo.getBaseCodeBranch());
+        javaApplicationDO.setConfigFilePath(javaAppInfo.getConfigFilePath());
+        javaApplicationDO.setJarPath(javaAppInfo.getJarPath());
+        javaApplicationDO.setPomPath(javaAppInfo.getPomPath());
+        javaApplicationDO.setMvnCommand(javaAppInfo.getMvnCommand());
+
+        applicationDAO.updateJavaApplication(javaApplicationDO);
     }
 
     private JavaApplication recoverJavaApplicationModel(ApplicationDO applicationDO,
