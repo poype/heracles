@@ -1,7 +1,5 @@
 package com.poype.heracles.core.facade.result;
 
-import java.util.List;
-
 /**
  * 单个应用在版本中的状态
  */
@@ -28,11 +26,6 @@ public class AppOfSprintView {
     private String codeBranch;
 
     /**
-     * 针对本次迭代的域名配置，只有后端才有该项配置
-     */
-    private List<String> hostConfigNames;
-
-    /**
      * 应用开发状态
      */
     private String status;
@@ -44,7 +37,6 @@ public class AppOfSprintView {
                 ", appType='" + appType + '\'' +
                 ", codeRepos='" + codeRepos + '\'' +
                 ", codeBranch='" + codeBranch + '\'' +
-                ", hostConfigNames=" + hostConfigNames +
                 ", status='" + status + '\'' +
                 '}';
     }
@@ -79,14 +71,6 @@ public class AppOfSprintView {
 
     public void setCodeBranch(String codeBranch) {
         this.codeBranch = codeBranch;
-    }
-
-    public List<String> getHostConfigNames() {
-        return hostConfigNames;
-    }
-
-    public void setHostConfigNames(List<String> hostConfigNames) {
-        this.hostConfigNames = hostConfigNames;
     }
 
     public String getStatus() {

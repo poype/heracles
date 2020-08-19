@@ -63,6 +63,18 @@ public class AppOfSprint {
         this.appType = appType;
     }
 
+    public AppOfSprint(String relationId, String app, ApplicationType appType, String codeRepository,
+                       String codeBranch, List<String> devSet, List<String> qaSet, AppOfSprintStatus status) {
+        this.relationId = relationId;
+        this.app = app;
+        this.appType = appType;
+        this.codeRepository = codeRepository;
+        this.codeBranch = codeBranch;
+        this.devSet = devSet;
+        this.qaSet = qaSet;
+        this.status = status;
+    }
+
     public String getRelationId() {
         return relationId;
     }

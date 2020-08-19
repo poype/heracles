@@ -14,6 +14,7 @@
             <list>
                 <value>applicationController</value>
                 <value>configFileController</value>
+                <value>sprintController</value>
             </list>
         </property>
     </bean>

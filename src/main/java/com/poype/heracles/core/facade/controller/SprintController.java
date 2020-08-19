@@ -11,17 +11,15 @@ import com.poype.heracles.core.domain.model.sprint.AppOfSprint;
 import com.poype.heracles.core.domain.model.sprint.Sprint;
 import com.poype.heracles.core.domain.service.SprintService;
 import com.poype.heracles.core.facade.request.CreateNewSprintRequest;
-import com.poype.heracles.core.facade.request.QuerySprintDetailRequest;
 import com.poype.heracles.core.facade.result.AppOfSprintView;
 import com.poype.heracles.core.facade.result.CreateNewSprintResult;
 import com.poype.heracles.core.facade.result.QuerySprintDetailResult;
+import com.poype.heracles.core.facade.result.SprintView;
 import com.poype.heracles.core.manager.SprintManager;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +39,8 @@ public class SprintController {
     private SprintService sprintService;
 
     @RequestMapping(value = "/createNew", method = RequestMethod.POST, produces = "application/json")
-    public CreateNewSprintResult createNew(final CreateNewSprintRequest request) {
+    @ResponseBody
+    public CreateNewSprintResult createNew(@RequestBody final CreateNewSprintRequest request) {
         ThreadLocalHolder.setBizScene(BizScene.CREATE_NEW_SPRINT);
 
         final CreateNewSprintResult result = new CreateNewSprintResult();
@@ -72,8 +71,9 @@ public class SprintController {
         return result;
     }
 
-    @RequestMapping(value = "/queryDetail", method = RequestMethod.POST, produces = "application/json")
-    public QuerySprintDetailResult queryDetail(final QuerySprintDetailRequest request) {
+    @RequestMapping(value = "/queryDetail", method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public QuerySprintDetailResult queryDetail(@RequestParam("sprintId") final String sprintId) {
         ThreadLocalHolder.setBizScene(BizScene.QUERY_SPRINT_DETAIL);
 
         final QuerySprintDetailResult result = new QuerySprintDetailResult();
@@ -82,18 +82,20 @@ public class SprintController {
 
             @Override
             public void check() {
-                AssertUtil.notBlank(request.getSprintId(), PARAM_ILLEGAL);
+                AssertUtil.notBlank(sprintId, PARAM_ILLEGAL);
             }
 
             @Override
             public void doService() {
-                Sprint sprint = sprintManager.queryBySprintId(request.getSprintId());
-                result.setSprintId(sprint.getSprintId());
-                result.setName(sprint.getSprintName());
-                result.setDescription(sprint.getDescription());
-                result.setReleaseDate(sprint.getReleaseDate());
-                result.setStatus(sprint.getStatus().getName());
-                result.setTestEnv(sprint.getSitEnvName());
+                Sprint sprint = sprintManager.queryBySprintId(sprintId);
+
+                SprintView sprintView = new SprintView();
+                sprintView.setSprintId(sprint.getSprintId());
+                sprintView.setName(sprint.getSprintName());
+                sprintView.setDescription(sprint.getDescription());
+                sprintView.setReleaseDate(sprint.getReleaseDate());
+                sprintView.setStatus(sprint.getStatus().getName());
+                sprintView.setTestEnv(sprint.getSitEnvName());
 
                 List<AppOfSprintView> appList = new ArrayList<>();
                 for (AppOfSprint appOfSprint : sprint.getApplications()) {
@@ -102,16 +104,19 @@ public class SprintController {
                     appOfSprintView.setCodeBranch(appOfSprint.getCodeBranch());
                     appOfSprintView.setCodeRepos(appOfSprint.getCodeRepository());
                     appOfSprintView.setAppType(appOfSprint.getAppType().getName());
+                    appOfSprintView.setStatus(appOfSprint.getStatus().getName());
                     appList.add(appOfSprintView);
                 }
-                result.setAppList(appList);
+                sprintView.setAppList(appList);
+                result.setSprintInfo(sprintView);
             }
         });
         return result;
     }
 
     @RequestMapping(value = "/createCodeBranch", method = RequestMethod.GET, produces = "application/json")
-    public BaseResult createCodeBranch(final String sprintId) {
+    @ResponseBody
+    public BaseResult createCodeBranch(@RequestParam("sprintId") final String sprintId) {
         ThreadLocalHolder.setBizScene(BizScene.CREATE_NEW_BRANCH);
 
         final BaseResult result = new BaseResult();

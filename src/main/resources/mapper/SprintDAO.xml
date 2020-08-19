@@ -39,4 +39,19 @@
         #{status}, now(), now())
     </insert>
 
+    <select id="querySprintById" resultMap="sprint_result_map">
+        select * from sprint where sprint_id = #{sprintId}
+    </select>
+
+    <select id="queryAppOfSprintListById" resultMap="app_of_sprint_result_map">
+        select * from app_of_sprint where sprint_id = #{sprintId}
+    </select>
+
+    <update id="updateSprintStatus">
+        update sprint set status = #{targetStatus} where sprint_id = #{sprintId}
+    </update>
+
+    <update id="batchUpdateAppOfSprintStatus">
+        update app_of_sprint set status = #{targetStatus} where sprint_id = #{sprintId}
+    </update>
 </mapper>

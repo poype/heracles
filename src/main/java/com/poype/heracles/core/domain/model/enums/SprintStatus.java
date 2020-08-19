@@ -1,19 +1,30 @@
 package com.poype.heracles.core.domain.model.enums;
 
 public enum SprintStatus {
-    START(0, "START"),
+    INIT(0, "INIT"),
 
-    SIT(1, "SIT"),
+    START(1, "START"),
 
-    UAT(2, "UAT"),
+    SIT(2, "SIT"),
 
-    RC(3, "RC"),
+    UAT(3, "UAT"),
 
-    RELEASE(4, "RELEASE");
+    RC(4, "RC"),
+
+    RELEASE(5, "RELEASE");
 
     private int code;
 
     private String name;
+
+    public static SprintStatus getByCode(int code) {
+        for (SprintStatus status : values()) {
+            if (status.getCode() == code) {
+                return status;
+            }
+        }
+        return null;
+    }
 
     SprintStatus(int code, String name) {
         this.code = code;

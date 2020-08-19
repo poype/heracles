@@ -1,6 +1,9 @@
 package com.poype.heracles.core.repository.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.poype.heracles.core.domain.model.enums.AppOfSprintStatus;
+import com.poype.heracles.core.domain.model.enums.ApplicationType;
+import com.poype.heracles.core.domain.model.enums.SprintStatus;
 import com.poype.heracles.core.domain.model.sprint.AppOfSprint;
 import com.poype.heracles.core.domain.model.sprint.Sprint;
 import com.poype.heracles.core.repository.SprintRepository;
@@ -8,8 +11,11 @@ import com.poype.heracles.core.repository.dao.SprintDAO;
 import com.poype.heracles.core.repository.dao.model.AppOfSprintDO;
 import com.poype.heracles.core.repository.dao.model.SprintDO;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository("sprintRepository")
 public class SprintRepositoryImpl implements SprintRepository {
@@ -17,6 +23,7 @@ public class SprintRepositoryImpl implements SprintRepository {
     @Resource
     private SprintDAO sprintDAO;
 
+    @Transactional
     @Override
     public void addNewSprint(Sprint sprint) {
         SprintDO sprintDO = new SprintDO(sprint.getSprintId(), sprint.getSprintName(), sprint.getDescription(),
@@ -35,11 +42,30 @@ public class SprintRepositoryImpl implements SprintRepository {
 
     @Override
     public Sprint queryBySprintId(String sprintId) {
-        return null;
+        SprintDO sprintDO = sprintDAO.querySprintById(sprintId);
+        List<AppOfSprintDO> appOfSprintDOList = sprintDAO.queryAppOfSprintListById(sprintId);
+
+        List<AppOfSprint> appList = new ArrayList<>();
+        for (AppOfSprintDO appOfSprintDO : appOfSprintDOList) {
+            AppOfSprint app = new AppOfSprint(appOfSprintDO.getRelationId(),
+                    appOfSprintDO.getApp(),
+                    ApplicationType.getByCode(appOfSprintDO.getAppType()),
+                    appOfSprintDO.getCodeRepository(),
+                    appOfSprintDO.getCodeBranch(),
+                    JSON.parseObject(appOfSprintDO.getDevS(), List.class),
+                    JSON.parseObject(appOfSprintDO.getQaS(), List.class),
+                    AppOfSprintStatus.getByCode(appOfSprintDO.getStatus()));
+            appList.add(app);
+        }
+        return new Sprint(sprintDO.getSprintId(), sprintDO.getSprintName(), sprintDO.getDescription(),
+                sprintDO.getReleaseDate(), SprintStatus.getByCode(sprintDO.getStatus()), appList,
+                sprintDO.getSitEnvName());
     }
 
+    @Transactional
     @Override
-    public void updateAppOfSprintStatus(Sprint sprint) {
-
+    public void updateWholeSprintToStartStatus(String sprintId) {
+        sprintDAO.updateSprintStatus(sprintId, SprintStatus.START.getCode());
+        sprintDAO.batchUpdateAppOfSprintStatus(sprintId, AppOfSprintStatus.START.getCode());
     }
 }

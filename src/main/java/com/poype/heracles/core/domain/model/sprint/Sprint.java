@@ -48,10 +48,21 @@ public class Sprint {
     public Sprint(String sprintName, String description, String releaseDate, List<AppOfSprint> applications,
                   String sitEnvName) {
         this.sprintId = IdUtil.generateBizId();
-        this.status = SprintStatus.START;
+        this.status = SprintStatus.INIT;
         this.sprintName = sprintName;
         this.description = description;
         this.releaseDate = releaseDate;
+        this.applications = applications;
+        this.sitEnvName = sitEnvName;
+    }
+
+    public Sprint(String sprintId, String sprintName, String description, String releaseDate,
+                  SprintStatus status, List<AppOfSprint> applications, String sitEnvName) {
+        this.sprintId = sprintId;
+        this.sprintName = sprintName;
+        this.description = description;
+        this.releaseDate = releaseDate;
+        this.status = status;
         this.applications = applications;
         this.sitEnvName = sitEnvName;
     }

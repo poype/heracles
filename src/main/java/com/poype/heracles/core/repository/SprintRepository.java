@@ -8,5 +8,5 @@ public interface SprintRepository {
 
     Sprint queryBySprintId(String sprintId);
 
-    void updateAppOfSprintStatus(Sprint sprint);
+    void updateWholeSprintToStartStatus(String sprintId);
 }

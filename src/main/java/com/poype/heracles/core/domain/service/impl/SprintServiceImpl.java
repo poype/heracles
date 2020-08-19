@@ -2,7 +2,6 @@ package com.poype.heracles.core.domain.service.impl;
 
 import com.poype.heracles.core.domain.model.application.Application;
 import com.poype.heracles.core.domain.model.dto.AppOfSprintDto;
-import com.poype.heracles.core.domain.model.enums.AppOfSprintStatus;
 import com.poype.heracles.core.domain.model.sprint.AppOfSprint;
 import com.poype.heracles.core.domain.model.sprint.Sprint;
 import com.poype.heracles.core.domain.service.SprintService;
@@ -57,8 +56,7 @@ public class SprintServiceImpl implements SprintService {
 
         for (AppOfSprint appOfSprint : sprint.getApplications()) {
             gitClient.createNewBranch(appOfSprint.getApp(), appOfSprint.getCodeBranch());
-            appOfSprint.setStatus(AppOfSprintStatus.DEV);
         }
-        sprintRepository.updateAppOfSprintStatus(sprint);
+        sprintRepository.updateWholeSprintToStartStatus(sprint.getSprintId());
     }
 }

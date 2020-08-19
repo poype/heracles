@@ -3,7 +3,7 @@ package com.poype.heracles.core.domain.model.enums;
 public enum AppOfSprintStatus {
     INIT(0, "INIT"),
 
-    DEV(1, "DEV"),
+    START(1, "START"),
 
     SIT(2, "SIT"),
 
@@ -14,6 +14,15 @@ public enum AppOfSprintStatus {
     private int code;
 
     private String name;
+
+    public static AppOfSprintStatus getByCode(int code) {
+        for (AppOfSprintStatus status : values()) {
+            if (status.getCode() == code) {
+                return status;
+            }
+        }
+        return null;
+    }
 
     AppOfSprintStatus(int code, String name) {
         this.code = code;

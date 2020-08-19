@@ -31,3 +31,13 @@ CREATE TABLE `heracles`.`java_application` (
 `mvn_command` VARCHAR(200) NULL,
 PRIMARY KEY (`application_id`));
 
+CREATE TABLE `heracles`.`sprint` (
+`sprint_id` CHAR(30) NOT NULL,
+`sprint_name` VARCHAR(50) NOT NULL,
+`description` VARCHAR(500) NULL,
+`release_date` CHAR(8) NOT NULL,
+`status` INT NULL,
+`sit_env_name` VARCHAR(10) NULL,
+`create_time` DATETIME NULL,
+`update_time` DATETIME NULL,
+PRIMARY KEY (`sprint_id`));
