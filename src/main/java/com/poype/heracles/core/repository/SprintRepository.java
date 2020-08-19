@@ -1,6 +1,9 @@
 package com.poype.heracles.core.repository;
 
+import com.poype.heracles.core.domain.model.dto.SimpleSprintDto;
 import com.poype.heracles.core.domain.model.sprint.Sprint;
+
+import java.util.List;
 
 public interface SprintRepository {
 
@@ -9,4 +12,11 @@ public interface SprintRepository {
     Sprint queryBySprintId(String sprintId);
 
     void updateWholeSprintToStartStatus(String sprintId);
+
+    List<SimpleSprintDto> queryPage(int pageNum);
+
+    /**
+     * 总数
+     */
+    int queryTotal();
 }

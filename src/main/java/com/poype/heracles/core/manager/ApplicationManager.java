@@ -2,9 +2,9 @@ package com.poype.heracles.core.manager;
 
 import com.poype.heracles.core.domain.model.application.Application;
 import com.poype.heracles.core.domain.model.dto.JavaApplicationDto;
-import com.poype.heracles.core.domain.model.dto.SimpleApplicationDto;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ApplicationManager {
 
@@ -36,7 +36,7 @@ public interface ApplicationManager {
      * 分页查询应用的简要信息
      * @return 分页号
      */
-    List<SimpleApplicationDto> querySimpleAppList(int pageNum);
+    Map<String, Object> querySimpleAppList(int pageNum);
 
     /**
      * 更新应用的Java部分信息

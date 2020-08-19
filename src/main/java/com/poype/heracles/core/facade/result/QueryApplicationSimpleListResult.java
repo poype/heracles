@@ -9,10 +9,13 @@ public class QueryApplicationSimpleListResult extends BaseResult {
 
     private List<SimpleApplicationDto> appList;
 
+    private int total;
+
     @Override
     public String toString() {
         return "QueryApplicationSimpleListResult{" +
                 "appList=" + appList +
+                ", total=" + total +
                 ", " + super.toString() +
                 '}';
     }
@@ -23,5 +26,13 @@ public class QueryApplicationSimpleListResult extends BaseResult {
 
     public void setAppList(List<SimpleApplicationDto> appList) {
         this.appList = appList;
+    }
+
+    public int getTotal() {
+        return total;
+    }
+
+    public void setTotal(int total) {
+        this.total = total;
     }
 }

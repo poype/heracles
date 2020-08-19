@@ -1,6 +1,7 @@
 package com.poype.heracles.core.repository.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.poype.heracles.core.domain.model.dto.SimpleSprintDto;
 import com.poype.heracles.core.domain.model.enums.AppOfSprintStatus;
 import com.poype.heracles.core.domain.model.enums.ApplicationType;
 import com.poype.heracles.core.domain.model.enums.SprintStatus;
@@ -67,5 +68,26 @@ public class SprintRepositoryImpl implements SprintRepository {
     public void updateWholeSprintToStartStatus(String sprintId) {
         sprintDAO.updateSprintStatus(sprintId, SprintStatus.START.getCode());
         sprintDAO.batchUpdateAppOfSprintStatus(sprintId, AppOfSprintStatus.START.getCode());
+    }
+
+    @Override
+    public List<SimpleSprintDto> queryPage(int pageNum) {
+        int offset = (pageNum - 1) * 10;
+
+        List<SimpleSprintDto> simpleSprintDtoList = new ArrayList<>();
+
+        List<SprintDO> sprintDOList = sprintDAO.queryPageOfSprint(offset);
+        for (SprintDO sprintDO : sprintDOList) {
+            SimpleSprintDto simpleSprintDto = new SimpleSprintDto(sprintDO.getSprintName(),
+                    sprintDO.getDescription(), sprintDO.getReleaseDate(),
+                    SprintStatus.getByCode(sprintDO.getStatus()).getName());
+            simpleSprintDtoList.add(simpleSprintDto);
+        }
+        return simpleSprintDtoList;
+    }
+
+    @Override
+    public int queryTotal() {
+        return sprintDAO.queryTotal();
     }
 }

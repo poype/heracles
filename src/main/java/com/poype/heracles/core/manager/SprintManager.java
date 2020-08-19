@@ -4,6 +4,7 @@ import com.poype.heracles.core.domain.model.dto.AppOfSprintDto;
 import com.poype.heracles.core.domain.model.sprint.Sprint;
 
 import java.util.List;
+import java.util.Map;
 
 public interface SprintManager {
 
@@ -25,4 +26,10 @@ public interface SprintManager {
      * @return 版本模型
      */
     Sprint queryBySprintId(String sprintId);
+
+    /**
+     * 分页查询应用的简要信息
+     * @return 分页号
+     */
+    Map<String, Object> querySimpleSprintList(int pageNum);
 }

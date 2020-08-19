@@ -24,6 +24,8 @@ public enum BizScene {
     CHECK_GIT_URL("0010", "check git url"),
 
     UPDATE_JAVA_APP_INFO("0011", "update java app info"),
+
+    SPRINT_QUERY_SIMPLE_LIST("0012", "sprint query simple list"),
     ;
 
     /** 场景编码 */

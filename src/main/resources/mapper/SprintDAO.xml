@@ -54,4 +54,12 @@
     <update id="batchUpdateAppOfSprintStatus">
         update app_of_sprint set status = #{targetStatus} where sprint_id = #{sprintId}
     </update>
+
+    <select id="queryPageOfSprint" resultMap="sprint_result_map">
+        select * from sprint limit #{offset}, 10
+    </select>
+
+    <select id="queryTotal" resultType="java.lang.Integer">
+        select count(*) from sprint
+    </select>
 </mapper>

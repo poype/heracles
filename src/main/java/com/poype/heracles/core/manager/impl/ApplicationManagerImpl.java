@@ -10,7 +10,9 @@ import com.poype.heracles.core.repository.integration.GitClient;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service("applicationManager")
 public class ApplicationManagerImpl implements ApplicationManager {
@@ -46,8 +48,14 @@ public class ApplicationManagerImpl implements ApplicationManager {
     }
 
     @Override
-    public List<SimpleApplicationDto> querySimpleAppList(int pageNum) {
-        return applicationRepository.queryPage(pageNum);
+    public Map<String, Object> querySimpleAppList(int pageNum) {
+        List<SimpleApplicationDto> simpleApplicationDtoList = applicationRepository.queryPage(pageNum);
+        int total = applicationRepository.queryTotal();
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("appList", simpleApplicationDtoList);
+        map.put("total", total);
+        return map;
     }
 
     @Override

@@ -87,4 +87,8 @@
     <delete id="deleteConfigsByAppId">
         delete from application_config where application_id = #{applicationId}
     </delete>
+
+    <select id="queryTotal" resultType="java.lang.Integer">
+        select count(*) from application
+    </select>
 </mapper>

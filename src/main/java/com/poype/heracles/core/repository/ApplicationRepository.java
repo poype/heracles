@@ -43,4 +43,9 @@ public interface ApplicationRepository {
      * @param javaAppInfo java相关信息
      */
     void updateJavaAppInfo(String appId, JavaApplicationDto javaAppInfo, List<ApplicationConfig> appConfigList);
+
+    /**
+     * 总数
+     */
+    int queryTotal();
 }

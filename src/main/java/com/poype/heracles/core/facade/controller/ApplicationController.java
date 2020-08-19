@@ -160,8 +160,9 @@ public class ApplicationController {
 
             @Override
             public void doService() {
-                List<SimpleApplicationDto> appList = applicationManager.querySimpleAppList(pageNum);
-                result.setAppList(appList);
+                Map<String, Object> map = applicationManager.querySimpleAppList(pageNum);
+                result.setAppList((List<SimpleApplicationDto>) map.get("appList"));
+                result.setTotal((int) map.get("total"));
             }
         });
 

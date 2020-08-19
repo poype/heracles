@@ -32,4 +32,6 @@ public interface ApplicationDAO {
     void updateJavaApplication(JavaApplicationDO javaApplicationDO);
 
     void deleteConfigsByAppId(@Param("applicationId") String applicationId);
+
+    int queryTotal();
 }

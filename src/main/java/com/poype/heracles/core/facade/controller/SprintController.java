@@ -7,14 +7,12 @@ import com.poype.heracles.common.template.ExecuteTemplate;
 import com.poype.heracles.common.util.AssertUtil;
 import com.poype.heracles.common.util.ThreadLocalHolder;
 import com.poype.heracles.core.domain.model.dto.AppOfSprintDto;
+import com.poype.heracles.core.domain.model.dto.SimpleSprintDto;
 import com.poype.heracles.core.domain.model.sprint.AppOfSprint;
 import com.poype.heracles.core.domain.model.sprint.Sprint;
 import com.poype.heracles.core.domain.service.SprintService;
 import com.poype.heracles.core.facade.request.CreateNewSprintRequest;
-import com.poype.heracles.core.facade.result.AppOfSprintView;
-import com.poype.heracles.core.facade.result.CreateNewSprintResult;
-import com.poype.heracles.core.facade.result.QuerySprintDetailResult;
-import com.poype.heracles.core.facade.result.SprintView;
+import com.poype.heracles.core.facade.result.*;
 import com.poype.heracles.core.manager.SprintManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static com.poype.heracles.common.enums.BusinessErrorCode.PARAM_ILLEGAL;
 
@@ -112,6 +111,32 @@ public class SprintController {
             }
         });
         return result;
+    }
+
+    @RequestMapping(value = "/querySimpleList", method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public QuerySprintSimpleListResult querySimpleList(@RequestParam("pageNum") final int pageNum) {
+
+        ThreadLocalHolder.setBizScene(BizScene.SPRINT_QUERY_SIMPLE_LIST);
+
+        final QuerySprintSimpleListResult result = new QuerySprintSimpleListResult();
+
+        executeTemplate.execute(result, new ExecuteCallback() {
+
+            @Override
+            public void check() {
+                AssertUtil.isTrue(pageNum > 0, PARAM_ILLEGAL);
+            }
+
+            @Override
+            public void doService() {
+                Map<String, Object> map = sprintManager.querySimpleSprintList(pageNum);
+                result.setSprintList((List<SimpleSprintDto>) map.get("sprintList"));
+                result.setTotal((int) map.get("total"));
+            }
+        });
+        return result;
+
     }
 
     @RequestMapping(value = "/createCodeBranch", method = RequestMethod.GET, produces = "application/json")

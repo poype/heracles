@@ -23,4 +23,8 @@ public interface SprintDAO {
     void updateSprintStatus(@Param("sprintId") String sprintId, @Param("targetStatus") int targetStatus);
 
     void batchUpdateAppOfSprintStatus(@Param("sprintId") String sprintId, @Param("targetStatus") int targetStatus);
+
+    List<SprintDO> queryPageOfSprint(@Param("offset") int offset);
+
+    int queryTotal();
 }
