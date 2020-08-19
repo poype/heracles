@@ -52,6 +52,6 @@ public class ApplicationManagerImpl implements ApplicationManager {
 
     @Override
     public void updateJavaAppInfo(String appId, JavaApplicationDto javaAppInfo) {
-        applicationRepository.updateJavaAppInfo(appId, javaAppInfo);
+        applicationService.updateJavaAppInfo(appId, javaAppInfo);
     }
 }

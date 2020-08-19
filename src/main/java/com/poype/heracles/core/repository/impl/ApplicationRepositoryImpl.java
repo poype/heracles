@@ -33,14 +33,15 @@ public class ApplicationRepositoryImpl implements ApplicationRepository {
     public void addJavaApplication(JavaApplication javaApplication) {
         ApplicationDO applicationDO = convertToApplicationDO(javaApplication);
         JavaApplicationDO javaApplicationDO = convertToJavaApplicationDO(javaApplication);
-        List<ApplicationConfigDO> applicationConfigDOList = extractApplicationConfigDOList(javaApplication);
+        List<ApplicationConfigDO> applicationConfigDOList =
+                extractApplicationConfigDOList(javaApplication.getApplicationId(), javaApplication.getConfigs());
 
         try {
+            applicationDAO.saveApplication(applicationDO);
+            applicationDAO.saveJavaApplication(javaApplicationDO);
             for (ApplicationConfigDO applicationConfigDO : applicationConfigDOList) {
                 applicationDAO.saveApplicationConfig(applicationConfigDO);
             }
-            applicationDAO.saveApplication(applicationDO);
-            applicationDAO.saveJavaApplication(javaApplicationDO);
         } catch (DuplicateKeyException ex) {
             AssertUtil.isTrue(false, BusinessErrorCode.DUPLICATE_APP_NAME);
         }
@@ -83,8 +84,9 @@ public class ApplicationRepositoryImpl implements ApplicationRepository {
         return applicationList;
     }
 
+    @Transactional
     @Override
-    public void updateJavaAppInfo(String appId, JavaApplicationDto javaAppInfo) {
+    public void updateJavaAppInfo(String appId, JavaApplicationDto javaAppInfo, List<ApplicationConfig> appConfigList) {
         JavaApplicationDO javaApplicationDO = applicationDAO.queryJavaApplicationById(appId);
         AssertUtil.notNull(javaApplicationDO, BusinessErrorCode.APP_NOT_FOUND);
 
@@ -95,6 +97,12 @@ public class ApplicationRepositoryImpl implements ApplicationRepository {
         javaApplicationDO.setMvnCommand(javaAppInfo.getMvnCommand());
 
         applicationDAO.updateJavaApplication(javaApplicationDO);
+        applicationDAO.deleteConfigsByAppId(appId);
+
+        List<ApplicationConfigDO> applicationConfigDOList = extractApplicationConfigDOList(appId, appConfigList);
+        for (ApplicationConfigDO applicationConfigDO : applicationConfigDOList) {
+            applicationDAO.saveApplicationConfig(applicationConfigDO);
+        }
     }
 
     private JavaApplication recoverJavaApplicationModel(ApplicationDO applicationDO,
@@ -146,12 +154,13 @@ public class ApplicationRepositoryImpl implements ApplicationRepository {
         return javaApplicationDO;
     }
 
-    private List<ApplicationConfigDO> extractApplicationConfigDOList(Application application) {
+    private List<ApplicationConfigDO> extractApplicationConfigDOList(String applicationId,
+                                                                     List<ApplicationConfig> configs) {
         List<ApplicationConfigDO> applicationConfigDOList = new ArrayList<>();
-        for (ApplicationConfig applicationConfig : application.getConfigs()) {
+        for (ApplicationConfig applicationConfig : configs) {
             ApplicationConfigDO applicationConfigDO = new ApplicationConfigDO();
             applicationConfigDO.setConfigId(applicationConfig.getConfigId());
-            applicationConfigDO.setApplicationId(application.getApplicationId());
+            applicationConfigDO.setApplicationId(applicationId);
             applicationConfigDO.setConfigType(applicationConfig.getConfigType().getCode());
             applicationConfigDO.setConfigValue(applicationConfig.getConfigValue());
             applicationConfigDOList.add(applicationConfigDO);

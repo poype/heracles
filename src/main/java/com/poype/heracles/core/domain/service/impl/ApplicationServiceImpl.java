@@ -33,10 +33,29 @@ public class ApplicationServiceImpl implements ApplicationService {
         return null;
     }
 
+    @Override
+    public void updateJavaAppInfo(String appId, JavaApplicationDto javaAppInfo) {
+        List<ApplicationConfig> appConfigList = extractJavaConfigList(javaAppInfo);
+        applicationRepository.updateJavaAppInfo(appId, javaAppInfo, appConfigList);
+    }
+
     private String createJavaApplication(String domainId, String appName, String appType, String description,
                                          String devOwner, List<String> devList, String qaOwner, List<String> qaList,
                                          String belongSystem, String belongBusiness, String codeRepository,
                                          JavaApplicationDto javaAppInfo) {
+        List<ApplicationConfig> appConfigList = extractJavaConfigList(javaAppInfo);
+
+        JavaApplication javaApplication = new JavaApplication(domainId, appName, ApplicationType.getByName(appType),
+                description, codeRepository, devOwner, new HashSet<String>(devList), qaOwner,
+                new HashSet<String>(qaList), belongSystem, belongBusiness, appConfigList,
+                javaAppInfo.getBaseCodeBranch(), javaAppInfo.getConfigFilePath(), javaAppInfo.getJarPath(),
+                javaAppInfo.getPomPath(), javaAppInfo.getMvnCommand());
+
+        applicationRepository.addJavaApplication(javaApplication);
+        return javaApplication.getApplicationId();
+    }
+
+    private List<ApplicationConfig> extractJavaConfigList(JavaApplicationDto javaAppInfo) {
         List<ApplicationConfig> appConfigList = new ArrayList<>();
         // host配置
         if (!CollectionUtils.isEmpty(javaAppInfo.getHostConfigNames())) {
@@ -50,14 +69,6 @@ public class ApplicationServiceImpl implements ApplicationService {
                     JSON.toJSONString(javaAppInfo.getHardwareLevels()));
             appConfigList.add(hardwareConfig);
         }
-
-        JavaApplication javaApplication = new JavaApplication(domainId, appName, ApplicationType.getByName(appType),
-                description, codeRepository, devOwner, new HashSet<String>(devList), qaOwner,
-                new HashSet<String>(qaList), belongSystem, belongBusiness, appConfigList,
-                javaAppInfo.getBaseCodeBranch(), javaAppInfo.getConfigFilePath(), javaAppInfo.getJarPath(),
-                javaAppInfo.getPomPath(), javaAppInfo.getMvnCommand());
-
-        applicationRepository.addJavaApplication(javaApplication);
-        return javaApplication.getApplicationId();
+        return appConfigList;
     }
 }

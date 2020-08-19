@@ -83,4 +83,8 @@
         jar_path = #{jarPath}, pom_path = #{pomPath}, mvn_command = #{mvnCommand}, update_time = now()
         where application_id = #{applicationId}
     </update>
+
+    <delete id="deleteConfigsByAppId">
+        delete from application_config where application_id = #{applicationId}
+    </delete>
 </mapper>

@@ -30,4 +30,6 @@ public interface ApplicationDAO {
     List<ApplicationConfigDO> queryConfigListByAppId(@Param("applicationId") String applicationId);
 
     void updateJavaApplication(JavaApplicationDO javaApplicationDO);
+
+    void deleteConfigsByAppId(@Param("applicationId") String applicationId);
 }

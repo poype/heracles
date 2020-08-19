@@ -22,4 +22,11 @@ public interface ApplicationService {
     String createNewApplication(String domainId, String appName, String appType, String description, String devOwner,
                                 List<String> devList, String qaOwner, List<String> qaList, String belongSystem,
                                 String belongBusiness, String codeRepository, JavaApplicationDto javaAppInfo);
+
+    /**
+     * 更新Java应用信息
+     * @param appId 应用Id
+     * @param javaAppInfo Java信息
+     */
+    void updateJavaAppInfo(String appId, JavaApplicationDto javaAppInfo);
 }

@@ -2,6 +2,7 @@ package com.poype.heracles.core.repository;
 
 import com.poype.heracles.core.domain.model.application.Application;
 import com.poype.heracles.core.domain.model.application.JavaApplication;
+import com.poype.heracles.core.domain.model.application.config.ApplicationConfig;
 import com.poype.heracles.core.domain.model.dto.JavaApplicationDto;
 import com.poype.heracles.core.domain.model.dto.SimpleApplicationDto;
 
@@ -41,5 +42,5 @@ public interface ApplicationRepository {
      * @param appId 应用Id
      * @param javaAppInfo java相关信息
      */
-    void updateJavaAppInfo(String appId, JavaApplicationDto javaAppInfo);
+    void updateJavaAppInfo(String appId, JavaApplicationDto javaAppInfo, List<ApplicationConfig> appConfigList);
 }

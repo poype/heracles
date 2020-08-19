@@ -87,9 +87,9 @@ public class ApplicationController {
         return result;
     }
 
-    @RequestMapping(value = "/queryDetail", method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value = "/queryDetail", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
-    public QueryApplicationDetailResult queryDetail(@RequestBody final String appId) {
+    public QueryApplicationDetailResult queryDetail(@RequestParam("appId") final String appId) {
 
         ThreadLocalHolder.setBizScene(BizScene.QUERY_APPLICATION_DETAIL);
 
@@ -143,9 +143,9 @@ public class ApplicationController {
         return result;
     }
 
-    @RequestMapping(value = "/querySimpleList", method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value = "/querySimpleList", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
-    public QueryApplicationSimpleListResult querySimpleList(@RequestBody final int pageNum) {
+    public QueryApplicationSimpleListResult querySimpleList(@RequestParam("pageNum") final int pageNum) {
 
         ThreadLocalHolder.setBizScene(BizScene.QUERY_APPLICATION_SIMPLE_LIST);
 
