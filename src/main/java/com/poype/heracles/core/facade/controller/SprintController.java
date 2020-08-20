@@ -12,6 +12,7 @@ import com.poype.heracles.core.domain.model.sprint.AppOfSprint;
 import com.poype.heracles.core.domain.model.sprint.Sprint;
 import com.poype.heracles.core.domain.service.SprintService;
 import com.poype.heracles.core.facade.request.CreateNewSprintRequest;
+import com.poype.heracles.core.facade.request.UpdateSprintRequest;
 import com.poype.heracles.core.facade.result.*;
 import com.poype.heracles.core.manager.SprintManager;
 import org.springframework.stereotype.Controller;
@@ -65,6 +66,35 @@ public class SprintController {
                 String sprintId = sprintManager.createNewSprint(request.getName(), request.getDescription(),
                         request.getReleaseDate(), request.getAppList(), createUser);
                 result.setSprintId(sprintId);
+            }
+        });
+        return result;
+    }
+
+    @RequestMapping(value = "/update", method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public BaseResult update(@RequestBody final UpdateSprintRequest request) {
+
+        ThreadLocalHolder.setBizScene(BizScene.UPDATE_SPRINT);
+
+        final BaseResult result = new BaseResult();
+
+        executeTemplate.execute(result, new ExecuteCallback() {
+
+            @Override
+            public void check() {
+                AssertUtil.notBlank(request.getSprintId(), PARAM_ILLEGAL, "版本Id不能为空");
+                for (AppOfSprintDto app : request.getAppList()) {
+                    AssertUtil.notBlank(app.getAppName(), PARAM_ILLEGAL, "应用名字不能为空");
+                    AssertUtil.notEmpty(app.getDevList(), PARAM_ILLEGAL, "必须制定至少一个研发人员");
+                    AssertUtil.notEmpty(app.getQaList(), PARAM_ILLEGAL, "必须制定至少一个测试人员");
+                }
+            }
+
+            @Override
+            public void doService() {
+                String createUser = "poype";
+                sprintManager.update(request.getSprintId(), request.getAppList());
             }
         });
         return result;

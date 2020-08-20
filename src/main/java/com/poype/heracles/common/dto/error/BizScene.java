@@ -28,6 +28,8 @@ public enum BizScene {
     SPRINT_QUERY_SIMPLE_LIST("0012", "sprint query simple list"),
 
     QUERY_ALL_APP_NAMES("0013", "query all app names"),
+
+    UPDATE_SPRINT("0014", "update sprint"),
     ;
 
     /** 场景编码 */

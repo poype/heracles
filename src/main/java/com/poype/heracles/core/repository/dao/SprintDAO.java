@@ -27,4 +27,9 @@ public interface SprintDAO {
     List<SprintDO> queryPageOfSprint(@Param("offset") int offset);
 
     int queryTotal();
+
+    void deleteApp(@Param("appName") String appName);
+
+    void updateDevAndQaOfApp(@Param("appName") String appName, @Param("devS") String devS,
+                             @Param("qaS") String qaS);
 }

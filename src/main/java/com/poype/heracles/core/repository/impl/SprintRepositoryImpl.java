@@ -95,4 +95,23 @@ public class SprintRepositoryImpl implements SprintRepository {
     public void updateSprintStatus(String sprintId, SprintStatus targetStatus) {
         sprintDAO.updateSprintStatus(sprintId, targetStatus.getCode());
     }
+
+    @Override
+    public void deleteApp(String appName) {
+        sprintDAO.deleteApp(appName);
+    }
+
+    @Override
+    public void updateDevAndQaOfApp(String appName, List<String> devList, List<String> qaList) {
+        sprintDAO.updateDevAndQaOfApp(appName, JSON.toJSONString(devList), JSON.toJSONString(qaList));
+    }
+
+    @Override
+    public void addNewAppForSprint(String sprintId, AppOfSprint appOfSprint) {
+        AppOfSprintDO appOfSprintDO = new AppOfSprintDO(appOfSprint.getRelationId(), sprintId,
+                appOfSprint.getApp(), appOfSprint.getAppType().getCode(), appOfSprint.getCodeRepository(),
+                appOfSprint.getCodeBranch(), JSON.toJSONString(appOfSprint.getDevSet()),
+                JSON.toJSONString(appOfSprint.getQaSet()), appOfSprint.getStatus().getCode());
+        sprintDAO.saveAppOfSprint(appOfSprintDO);
+    }
 }

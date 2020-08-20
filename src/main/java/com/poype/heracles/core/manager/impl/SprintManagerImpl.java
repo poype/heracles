@@ -39,6 +39,12 @@ public class SprintManagerImpl implements SprintManager {
     }
 
     @Override
+    public void update(String sprintId, List<AppOfSprintDto> appOfSprintDtoList) {
+        Sprint sprint = sprintService.queryBySprintId(sprintId);
+        sprintService.updateAppListOfSprint(sprint, appOfSprintDtoList);
+    }
+
+    @Override
     public Sprint queryBySprintId(String sprintId) {
         return sprintService.queryBySprintId(sprintId);
     }

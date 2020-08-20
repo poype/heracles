@@ -21,6 +21,13 @@ public interface SprintManager {
                            String createUser);
 
     /**
+     * 更新一个版本信息，只支持增加或减少应用
+     * @param sprintId 版本Id
+     * @param appOfSprintDtoList 应用list
+     */
+    void update(String sprintId, List<AppOfSprintDto> appOfSprintDtoList);
+
+    /**
      * 根据版本Id查询一个版本信息
      * @param sprintId 版本Id
      * @return 版本模型

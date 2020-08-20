@@ -32,4 +32,11 @@ public interface SprintService {
      * @param sprintId 版本Id
      */
     void createCodeBranch(String sprintId);
+
+    /**
+     * 更新一个版本中的应用信息
+     * @param sprint 版本模型
+     * @param appOfSprintDtoList 新的应用列表
+     */
+    void updateAppListOfSprint(Sprint sprint, List<AppOfSprintDto> appOfSprintDtoList);
 }

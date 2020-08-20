@@ -59,4 +59,69 @@ public class SprintServiceImpl implements SprintService {
         }
         sprintRepository.updateWholeSprintToStartStatus(sprint.getSprintId());
     }
+
+    @Override
+    public void updateAppListOfSprint(Sprint sprint, List<AppOfSprintDto> appOfSprintDtoList) {
+        List<String> addAppList = new ArrayList<>();
+        List<String> updateAppList = new ArrayList<>();
+        List<String> removeAppList = new ArrayList<>();
+
+        int originalAppCount = sprint.getApplications().size();
+        int newAppCount = appOfSprintDtoList.size();
+        for (int i = 0; i < newAppCount; i++) {
+            int j = 0;
+            for (; j < originalAppCount; j++) {
+                AppOfSprint originalApp = sprint.getApplications().get(j);
+                AppOfSprintDto newApp = appOfSprintDtoList.get(i);
+                if (newApp.getAppName().equals(originalApp.getApp())) {
+                    // 版本中已经存在这个应用，需要更新
+                    updateAppList.add(newApp.getAppName());
+                    break;
+                }
+            }
+            if (j == originalAppCount) {
+                // 版本中不包含这个应用，需要增加
+                addAppList.add(appOfSprintDtoList.get(i).getAppName());
+            }
+        }
+        for (int i = 0; i < originalAppCount; i++) {
+            int j = 0;
+            for (; j < newAppCount; j++) {
+                AppOfSprint originalApp = sprint.getApplications().get(i);
+                AppOfSprintDto newApp = appOfSprintDtoList.get(j);
+                if (newApp.getAppName().equals(originalApp.getApp())) {
+                    break;
+                }
+            }
+            if (j == newAppCount) {
+                // 新的应用列表中没有，是要删除的应用
+                removeAppList.add(sprint.getApplications().get(i).getApp());
+            }
+        }
+        for (String app : removeAppList) {
+            sprintRepository.deleteApp(app);
+        }
+        for (String app : updateAppList) {
+            for (AppOfSprintDto appOfSprintDto : appOfSprintDtoList) {
+                if (app.equals(appOfSprintDto.getAppName())) {
+                    sprintRepository.updateDevAndQaOfApp(app, appOfSprintDto.getDevList(),
+                            appOfSprintDto.getQaList());
+                    break;
+                }
+            }
+        }
+
+        for (String app : addAppList) {
+            for (AppOfSprintDto appOfSprintDto : appOfSprintDtoList) {
+                if (app.equals(appOfSprintDto.getAppName())) {
+                    Application application = applicationRepository.queryByAppName(app);
+                    AppOfSprint appOfSprint = new AppOfSprint(appOfSprintDto.getAppName(), appOfSprintDto.getDevList(),
+                            appOfSprintDto.getQaList(), appOfSprintDto.getAppName() + sprint.getReleaseDate(),
+                            application.getCodeRepository(), application.getApplicationType());
+                    sprintRepository.addNewAppForSprint(sprint.getSprintId(), appOfSprint);
+                    break;
+                }
+            }
+        }
+    }
 }

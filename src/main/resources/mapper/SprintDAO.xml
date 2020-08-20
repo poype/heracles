@@ -62,4 +62,12 @@
     <select id="queryTotal" resultType="java.lang.Integer">
         select count(*) from sprint
     </select>
+
+    <delete id="deleteApp">
+        delete from app_of_sprint where app = #{appName}
+    </delete>
+
+    <update id="updateDevAndQaOfApp">
+        update app_of_sprint set dev_s = #{devS}, qa_s = #{qaS} where app = #{appName}
+    </update>
 </mapper>
