@@ -13,6 +13,15 @@ public enum ReleaseItemStatus {
 
     private String name;
 
+    public static ReleaseItemStatus getByCode(int code) {
+        for (ReleaseItemStatus status : values()) {
+            if (status.getCode() == code) {
+                return status;
+            }
+        }
+        return null;
+    }
+
     ReleaseItemStatus(int code, String name) {
         this.code = code;
         this.name = name;

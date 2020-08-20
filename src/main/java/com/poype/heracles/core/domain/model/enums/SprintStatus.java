@@ -9,9 +9,15 @@ public enum SprintStatus {
 
     UAT(3, "UAT"),
 
-    RC(4, "RC"),
+    FINISH_TEST(4, "FINISH_TEST"),
 
-    RELEASE(5, "RELEASE");
+    RC(5, "RC"),
+
+    FINISH_RC_TEST(6, "FINISH_RC_TEST"),
+
+    PROD(7, "RELEASE"),
+
+    FINISH_PROD_VERIFY(8, "FINISH_RC_TEST");
 
     private int code;
 

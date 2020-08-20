@@ -5,14 +5,12 @@ import com.poype.heracles.common.template.ExecuteCallback;
 import com.poype.heracles.common.template.ExecuteTemplate;
 import com.poype.heracles.common.util.AssertUtil;
 import com.poype.heracles.common.util.ThreadLocalHolder;
-import com.poype.heracles.core.domain.model.AppOfRelease;
-import com.poype.heracles.core.facade.request.CreateReleaseOrderRequest;
+import com.poype.heracles.core.facade.request.CreateReleaseOrderForSprintRequest;
 import com.poype.heracles.core.facade.request.QueryReleaseOrderStatusRequest;
 import com.poype.heracles.core.facade.result.CreateReleaseOrderResult;
 import com.poype.heracles.core.facade.result.QueryReleaseOrderStatusResult;
 import com.poype.heracles.core.facade.result.ReleaseOrderView;
 import com.poype.heracles.core.manager.ReleaseManager;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,7 +30,7 @@ public class ReleaseController {
     private ReleaseManager releaseManager;
 
     @RequestMapping(value = "/create", method = RequestMethod.POST, produces = "application/json")
-    public CreateReleaseOrderResult createReleaseOrder(final CreateReleaseOrderRequest request) {
+    public CreateReleaseOrderResult createReleaseOrderForSprint(final CreateReleaseOrderForSprintRequest request) {
 
         ThreadLocalHolder.setBizScene(BizScene.RELEASE_ORDER_CREATE);
 
@@ -42,25 +40,15 @@ public class ReleaseController {
 
             @Override
             public void check() {
-                AssertUtil.notBlank(request.getEnvName(), PARAM_ILLEGAL, "环境名字不能为空");
-                AssertUtil.notBlank(request.getReleaseName(), PARAM_ILLEGAL, "发布名称不能为空");
-                AssertUtil.notBlank(request.getDescription(), PARAM_ILLEGAL, "发布描述不能为空");
-
-                if (StringUtils.isBlank(request.getSprintId())) {
-                    AssertUtil.notEmpty(request.getAppList(), PARAM_ILLEGAL, "应用列表不能为空");
-                    for (AppOfRelease app : request.getAppList()) {
-                        AssertUtil.notBlank(app.getAppName(), PARAM_ILLEGAL, "应用名字不能为空");
-                        AssertUtil.notBlank(app.getCodeBranch(), PARAM_ILLEGAL, "代码分支不能为空");
-                    }
-                }
+                AssertUtil.notBlank(request.getSprintId(), PARAM_ILLEGAL);
+                AssertUtil.notBlank(request.getApp(), PARAM_ILLEGAL);
             }
 
             @Override
             public void doService() {
-                String operator = "liudongliang214"; // todo 从session中获取
-                String releaseOrderId = releaseManager.createReleaseOrder(
-                        request.getSprintId(), request.getReleaseName(), request.getDescription(),
-                        operator, request.getEnvName(), request.getAppList());
+                String operator = "liudongliang214";
+                String releaseOrderId = releaseManager.createReleaseOrderForSprint(request.getSprintId(),
+                        request.getApp(), operator);
                 result.setReleaseOrderId(releaseOrderId);
             }
         });

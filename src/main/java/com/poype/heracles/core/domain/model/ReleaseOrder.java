@@ -107,6 +107,18 @@ public class ReleaseOrder {
         this.operator = operator;
     }
 
+    public ReleaseOrder(String orderId, String releaseName, String description, List<ReleaseItem> releaseItems,
+                        String envName, ReleaseOrderStatus status, String operator, Date releaseDate) {
+        this.orderId = orderId;
+        this.releaseName = releaseName;
+        this.description = description;
+        this.releaseItems = releaseItems;
+        this.envName = envName;
+        this.status = status;
+        this.operator = operator;
+        this.releaseDate = releaseDate;
+    }
+
     public String getOrderId() {
         return orderId;
     }

@@ -32,6 +32,8 @@ public enum BusinessErrorCode {
     DUPLICATE_APP_NAME("009", INFO, "DUPLICATE APP NAME"),
 
     APP_NOT_FOUND("010", INFO, "APP NOT FOUND"),
+
+    ILLEGAL_SPRINT_STATUS("011", INFO, "illegal sprint status"),
     ;
 
     private final String specificCode;

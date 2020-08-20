@@ -4,13 +4,16 @@ import com.poype.heracles.common.enums.BusinessErrorCode;
 import com.poype.heracles.common.util.AssertUtil;
 import com.poype.heracles.core.domain.model.*;
 import com.poype.heracles.core.domain.model.application.Application;
+import com.poype.heracles.core.domain.model.enums.AppOfSprintStatus;
 import com.poype.heracles.core.domain.model.enums.ReleaseItemStatus;
 import com.poype.heracles.core.domain.model.enums.ReleaseOrderStatus;
+import com.poype.heracles.core.domain.model.enums.SprintStatus;
 import com.poype.heracles.core.domain.model.sprint.AppOfSprint;
 import com.poype.heracles.core.domain.model.sprint.Sprint;
 import com.poype.heracles.core.domain.service.ReleaseService;
 import com.poype.heracles.core.repository.ApplicationRepository;
 import com.poype.heracles.core.repository.ReleaseRepository;
+import com.poype.heracles.core.repository.SprintRepository;
 import com.poype.heracles.core.repository.integration.ReleaseItemClient;
 import org.springframework.stereotype.Service;
 
@@ -29,56 +32,64 @@ public class ReleaseServiceImpl implements ReleaseService {
     @Resource
     private ReleaseItemClient releaseItemClient;
 
+    @Resource
+    private SprintRepository sprintRepository;
+
     @Override
-    public String createReleaseOrderBySprint(Sprint sprint, String releaseName, String description,
-                                             String envName, String operator) {
-        checkEnvParam(sprint, envName);
+    public String createReleaseOrderForSprint(Sprint sprint, String app, String operator) {
+        AppOfSprint appOfSprint = findAppFromSprint(sprint, app);
+        AssertUtil.notNull(appOfSprint, BusinessErrorCode.PARAM_ILLEGAL);
+
+        // 默认环境是UAT
+        String envName = AppOfSprintStatus.UAT.getName();
+        if (appOfSprint.getStatus() == AppOfSprintStatus.SIT) {
+            envName = sprint.getSitEnvName();
+        }
+
+        String releaseName = sprint.getSprintName() + "-" + app;
+        String description = sprint.getSprintName() + "-" + app + "-" + envName + "-release";
 
         ReleaseOrder releaseOrder = new ReleaseOrder(releaseName, description, envName, operator);
 
-        List<AppOfSprint> appOfSprintList = sprint.getApplications();
-        for (AppOfSprint appOfSprint : appOfSprintList) {
+        Application application = applicationRepository.queryByAppName(appOfSprint.getApp());
+        releaseOrder.addAppToRelease(appOfSprint, application.getCodeRepository());
+
+        releaseRepository.saveReleaseOrder(releaseOrder);
+        return releaseOrder.getOrderId();
+    }
+
+    @Override
+    public String createReleaseOrderForSprint(Sprint sprint, String operator) {
+        String envName = "";
+        if (sprint.getStatus().getCode() < SprintStatus.FINISH_RC_TEST.getCode()) {
+            // 在完成RC验证之前，只能发布RC环境
+            envName = "RC";
+            sprint.setStatus(SprintStatus.RC);
+        } else if (sprint.getStatus().getCode() < SprintStatus.FINISH_PROD_VERIFY.getCode()) {
+            envName = "PROD";
+            sprint.setStatus(SprintStatus.PROD);
+        }
+        AssertUtil.notBlank(envName, BusinessErrorCode.PARAM_ILLEGAL);
+
+        String releaseName = sprint.getSprintName() + "-" + envName;
+        String description = sprint.getSprintName() + "-" + envName + "-whole-release";
+
+        ReleaseOrder releaseOrder = new ReleaseOrder(releaseName, description, envName, operator);
+
+        for (AppOfSprint appOfSprint : sprint.getApplications()) {
             Application application = applicationRepository.queryByAppName(appOfSprint.getApp());
             releaseOrder.addAppToRelease(appOfSprint, application.getCodeRepository());
         }
+
+        // 更新sprint状态
+        sprintRepository.updateSprintStatus(sprint.getSprintId(), sprint.getStatus());
         releaseRepository.saveReleaseOrder(releaseOrder);
+
         return releaseOrder.getOrderId();
     }
 
     @Override
-    public String createReleaseOrderBySprintAndAppList(Sprint sprint, List<String> appList, String releaseName,
-                                                       String description, String envName, String operator) {
-        checkEnvParam(sprint, envName);
-
-        ReleaseOrder releaseOrder = new ReleaseOrder(releaseName, description, envName, operator);
-
-        List<AppOfSprint> appOfSprintList = sprint.getApplications();
-        for (AppOfSprint appOfSprint : appOfSprintList) {
-            if (appList.contains(appOfSprint.getApp())) {
-                Application application = applicationRepository.queryByAppName(appOfSprint.getApp());
-                releaseOrder.addAppToRelease(appOfSprint, application.getCodeRepository());
-            }
-        }
-        releaseRepository.saveReleaseOrder(releaseOrder);
-        return releaseOrder.getOrderId();
-    }
-
-    @Override
-    public String createReleaseOrderByAppListAndEnv(List<AppOfRelease> appList, String releaseName,
-                                                    String description, String envName, String operator) {
-        ReleaseOrder releaseOrder = new ReleaseOrder(releaseName, description, envName, operator);
-
-        for (AppOfRelease appOfRelease : appList) {
-            Application application = applicationRepository.queryByAppName(appOfRelease.getAppName());
-            releaseOrder.addAppToRelease(application.getApplicationName(), application.getCodeRepository(),
-                    appOfRelease.getCodeBranch());
-        }
-        releaseRepository.saveReleaseOrder(releaseOrder);
-        return releaseOrder.getOrderId();
-    }
-
-    @Override
-    public ReleaseOrder queryOrderStatus(String releaseOrderId) {
+    public ReleaseOrder queryReleaseOrder(String releaseOrderId) {
         ReleaseOrder releaseOrder = releaseRepository.queryByOrderId(releaseOrderId);
         if (releaseOrder.getStatus() == ReleaseOrderStatus.PROCESSING) {
             List<ReleaseItem> releaseItems = releaseOrder.getReleaseItems();
@@ -95,21 +106,18 @@ public class ReleaseServiceImpl implements ReleaseService {
                 }
             }
             if (changeFlag) {
-                releaseRepository.updateReleaseOrder(releaseOrder);
+                releaseRepository.updateReleaseOrderStatus(releaseOrder);
             }
         }
         return releaseOrder;
     }
 
-
-    /**
-     * 检查envName参数是否与Sprint匹配
-     * @param sprint 版本
-     * @param envName 环境名称
-     */
-    private void checkEnvParam(Sprint sprint, String envName) {
-        if (envName.startsWith("TEST")) {
-            AssertUtil.isTrue(sprint.getSitEnvName().equals(envName), BusinessErrorCode.RELEASE_ENV_ILLEGAL);
+    private AppOfSprint findAppFromSprint(Sprint sprint, String app) {
+        for (AppOfSprint appOfSprint : sprint.getApplications()) {
+            if (appOfSprint.getApp().equals(app)) {
+                return appOfSprint;
+            }
         }
+        return null;
     }
 }

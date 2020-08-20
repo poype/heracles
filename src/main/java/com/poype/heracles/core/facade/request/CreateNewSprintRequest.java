@@ -24,7 +24,7 @@ public class CreateNewSprintRequest {
     /**
      * 相关应用
      */
-    private List<AppOfSprintDto> apps;
+    private List<AppOfSprintDto> appList;
 
     @Override
     public String toString() {
@@ -32,7 +32,7 @@ public class CreateNewSprintRequest {
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", releaseDate='" + releaseDate + '\'' +
-                ", apps=" + apps +
+                ", appList=" + appList +
                 '}';
     }
 
@@ -60,11 +60,11 @@ public class CreateNewSprintRequest {
         this.releaseDate = releaseDate;
     }
 
-    public List<AppOfSprintDto> getApps() {
-        return apps;
+    public List<AppOfSprintDto> getAppList() {
+        return appList;
     }
 
-    public void setApps(List<AppOfSprintDto> apps) {
-        this.apps = apps;
+    public void setAppList(List<AppOfSprintDto> appList) {
+        this.appList = appList;
     }
 }

@@ -12,17 +12,17 @@ public class AppOfSprintDto {
     /**
      * 开发参与人
      */
-    private List<String> devNames;
+    private List<String> devList;
 
     /**
      * 测试参与人
      */
-    private List<String> qaNames;
+    private List<String> qaList;
 
-    public AppOfSprintDto(String appName, List<String> devNames, List<String> qaNames) {
+    public AppOfSprintDto(String appName, List<String> devList, List<String> qaList) {
         this.appName = appName;
-        this.devNames = devNames;
-        this.qaNames = qaNames;
+        this.devList = devList;
+        this.qaList = qaList;
     }
 
     public String getAppName() {
@@ -33,19 +33,19 @@ public class AppOfSprintDto {
         this.appName = appName;
     }
 
-    public List<String> getDevNames() {
-        return devNames;
+    public List<String> getDevList() {
+        return devList;
     }
 
-    public void setDevNames(List<String> devNames) {
-        this.devNames = devNames;
+    public void setDevList(List<String> devList) {
+        this.devList = devList;
     }
 
-    public List<String> getQaNames() {
-        return qaNames;
+    public List<String> getQaList() {
+        return qaList;
     }
 
-    public void setQaNames(List<String> qaNames) {
-        this.qaNames = qaNames;
+    public void setQaList(List<String> qaList) {
+        this.qaList = qaList;
     }
 }

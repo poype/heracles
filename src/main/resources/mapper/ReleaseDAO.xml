@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.poype.heracles.core.repository.dao.ReleaseDAO">
+
+    <resultMap id="release_order_result_map" type="com.poype.heracles.core.repository.dao.model.ReleaseOrderDO">
+        <result column="order_id" property="orderId"/>
+        <result column="release_name" property="releaseName"/>
+        <result column="description" property="description"/>
+        <result column="env_name" property="envName"/>
+        <result column="status" property="status"/>
+        <result column="operator" property="operator"/>
+        <result column="release_date" property="releaseDate"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <resultMap id="release_item_result_map" type="com.poype.heracles.core.repository.dao.model.ReleaseOrderDO">
+        <result column="item_id" property="itemId"/>
+        <result column="order_id" property="orderId"/>
+        <result column="status" property="status"/>
+        <result column="app_name" property="appName"/>
+        <result column="code_repos" property="codeRepos"/>
+        <result column="code_branch" property="codeBranch"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <insert id="saveReleaseOrder" parameterType="com.poype.heracles.core.repository.dao.model.ReleaseOrderDO">
+        insert into release_order(order_id, release_name, description, env_name, status, operator, release_date, create_time, update_time)
+        values (#{orderId}, #{releaseName}, #{description}, #{envName}, #{status}, #{operator}, #{releaseDate}, now(), now())
+    </insert>
+
+    <insert id="saveReleaseItem" parameterType="com.poype.heracles.core.repository.dao.model.ReleaseItemDO">
+        insert into release_item(item_id, order_id, status, app_name, code_repos, code_branch, create_time, update_time)
+        values (#{itemId}, #{orderId}, #{status}, #{appName}, #{codeRepos}, #{codeBranch}, now(), now())
+    </insert>
+
+    <select id="queryReleaseOrderById" resultMap="release_order_result_map">
+        select * from release_order where order_id = #{orderId}
+    </select>
+
+    <select id="queryReleaseItemListByOrderId" resultMap="release_item_result_map">
+        select * from release_item where order_id = #{orderId}
+    </select>
+
+    <update id="updateReleaseOrderStatus">
+        update release_order set status = #{status} where order_id = #{orderId}
+    </update>
+
+    <update id="updateReleaseItemStatus">
+        update release_item set status = #{status} where item_id = #{itemId}
+    </update>
+</mapper>

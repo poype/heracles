@@ -2,6 +2,7 @@ package com.poype.heracles.core.domain.model.dto;
 
 public class SimpleSprintDto {
 
+    private String sprintId;
     /**
      * 版本名称
      */
@@ -25,7 +26,9 @@ public class SimpleSprintDto {
     public SimpleSprintDto() {
     }
 
-    public SimpleSprintDto(String sprintName, String description, String releaseDate, String status) {
+    public SimpleSprintDto(String sprintId, String sprintName, String description, String releaseDate,
+                           String status) {
+        this.sprintId = sprintId;
         this.sprintName = sprintName;
         this.description = description;
         this.releaseDate = releaseDate;
@@ -62,5 +65,13 @@ public class SimpleSprintDto {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getSprintId() {
+        return sprintId;
+    }
+
+    public void setSprintId(String sprintId) {
+        this.sprintId = sprintId;
     }
 }

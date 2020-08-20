@@ -78,7 +78,7 @@ public class SprintRepositoryImpl implements SprintRepository {
 
         List<SprintDO> sprintDOList = sprintDAO.queryPageOfSprint(offset);
         for (SprintDO sprintDO : sprintDOList) {
-            SimpleSprintDto simpleSprintDto = new SimpleSprintDto(sprintDO.getSprintName(),
+            SimpleSprintDto simpleSprintDto = new SimpleSprintDto(sprintDO.getSprintId(), sprintDO.getSprintName(),
                     sprintDO.getDescription(), sprintDO.getReleaseDate(),
                     SprintStatus.getByCode(sprintDO.getStatus()).getName());
             simpleSprintDtoList.add(simpleSprintDto);
@@ -89,5 +89,10 @@ public class SprintRepositoryImpl implements SprintRepository {
     @Override
     public int queryTotal() {
         return sprintDAO.queryTotal();
+    }
+
+    @Override
+    public void updateSprintStatus(String sprintId, SprintStatus targetStatus) {
+        sprintDAO.updateSprintStatus(sprintId, targetStatus.getCode());
     }
 }

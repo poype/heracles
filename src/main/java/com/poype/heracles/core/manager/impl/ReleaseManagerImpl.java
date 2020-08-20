@@ -1,8 +1,10 @@
 package com.poype.heracles.core.manager.impl;
 
-import com.poype.heracles.core.domain.model.AppOfRelease;
+import com.poype.heracles.common.enums.BusinessErrorCode;
+import com.poype.heracles.common.util.AssertUtil;
 import com.poype.heracles.core.domain.model.ReleaseItem;
 import com.poype.heracles.core.domain.model.ReleaseOrder;
+import com.poype.heracles.core.domain.model.enums.SprintStatus;
 import com.poype.heracles.core.domain.model.sprint.Sprint;
 import com.poype.heracles.core.domain.service.EventService;
 import com.poype.heracles.core.domain.service.ReleaseService;
@@ -10,9 +12,7 @@ import com.poype.heracles.core.domain.service.SprintService;
 import com.poype.heracles.core.facade.result.ReleaseItemView;
 import com.poype.heracles.core.facade.result.ReleaseOrderView;
 import com.poype.heracles.core.manager.ReleaseManager;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
@@ -32,30 +32,27 @@ public class ReleaseManagerImpl implements ReleaseManager {
     private EventService eventService;
 
     @Override
-    public String createReleaseOrder(String sprintId, String releaseName, String description, String operator,
-                                     String envName, List<AppOfRelease> appList) {
-        String releaseOrderId;
+    public String createReleaseOrderForSprint(String sprintId, String app, String operator) {
+        Sprint sprint = sprintService.queryBySprintId(sprintId);
+        String releaseOrderId = releaseService.createReleaseOrderForSprint(sprint, app, operator);
 
-        if (StringUtils.isNotBlank(sprintId)) {
-            Sprint sprint = sprintService.queryBySprintId(sprintId);
-            if (CollectionUtils.isEmpty(appList)) {
-                // 发布整个sprint相关的所有app
-                releaseOrderId = releaseService.createReleaseOrderBySprint(sprint, releaseName,
-                        description, envName, operator);
-            } else {
-                // 发布sprint中对应的app
-                List<String> appNames = new ArrayList<>();
-                for (AppOfRelease appOfRelease : appList) {
-                    appNames.add(appOfRelease.getAppName());
-                }
-                releaseOrderId = releaseService.createReleaseOrderBySprintAndAppList(sprint, appNames,
-                        releaseName, description, envName, operator);
-            }
-        } else {
-            // 跟sprint无关，把相关应用发到对应的环境上
-            releaseOrderId = releaseService.createReleaseOrderByAppListAndEnv(appList, releaseName,
-                    description, envName, operator);
-        }
+        // 发送消息，异步推进发布状态
+        eventService.sendReleaseOrderCreated(releaseOrderId);
+
+        return releaseOrderId;
+    }
+
+    @Override
+    public String createReleaseOrderForSprint(String sprintId, String operator) {
+        Sprint sprint = sprintService.queryBySprintId(sprintId);
+
+        // 只有RC和PROD两个环境可以整体发布
+        AssertUtil.isTrue(sprint.getStatus().getCode() >= SprintStatus.FINISH_TEST.getCode() &&
+                        sprint.getStatus().getCode() <= SprintStatus.PROD.getCode(),
+                        BusinessErrorCode.ILLEGAL_SPRINT_STATUS);
+
+        String releaseOrderId = releaseService.createReleaseOrderForSprint(sprint, operator);
+
         // 发送消息，异步推进发布状态
         eventService.sendReleaseOrderCreated(releaseOrderId);
 
@@ -64,7 +61,7 @@ public class ReleaseManagerImpl implements ReleaseManager {
 
     @Override
     public ReleaseOrderView queryReleaseOrderStatus(String releaseOrderId) {
-        ReleaseOrder releaseOrder = releaseService.queryOrderStatus(releaseOrderId);
+        ReleaseOrder releaseOrder = releaseService.queryReleaseOrder(releaseOrderId);
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm");
         ReleaseOrderView releaseOrderView = new ReleaseOrderView(releaseOrder.getOrderId(),

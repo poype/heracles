@@ -1,12 +1,12 @@
-package com.poype.heracles.core.domain.model;
+package com.poype.heracles.core.repository.dao.model;
 
-import com.poype.heracles.common.util.IdUtil;
-import com.poype.heracles.core.domain.model.enums.ReleaseItemStatus;
+import java.util.Date;
 
-/**
- * 发布项
- */
-public class ReleaseItem {
+public class ReleaseItemDO {
+    /**
+     * 发布项Id
+     */
+    private String itemId;
 
     /**
      * 发布单Id
@@ -14,14 +14,9 @@ public class ReleaseItem {
     private String orderId;
 
     /**
-     * 发布项Id
-     */
-    private String itemId;
-
-    /**
      * 发布项状态
      */
-    private ReleaseItemStatus status;
+    private int status;
 
     /**
      * 应用名字
@@ -38,31 +33,18 @@ public class ReleaseItem {
      */
     private String codeBranch;
 
-    public ReleaseItem(String orderId, String appName, String codeRepos, String codeBranch) {
-        this.itemId = IdUtil.generateBizId();
-        this.status = ReleaseItemStatus.INIT;
-        this.orderId = orderId;
-        this.appName = appName;
-        this.codeRepos = codeRepos;
-        this.codeBranch = codeBranch;
-    }
+    private Date createTime;
 
-    public ReleaseItem(String orderId, String itemId, ReleaseItemStatus status, String appName,
-                       String codeRepos, String codeBranch) {
-        this.orderId = orderId;
+    private Date updateTime;
+
+    public ReleaseItemDO(String itemId, String orderId, int status, String appName, String codeRepos,
+                         String codeBranch) {
         this.itemId = itemId;
+        this.orderId = orderId;
         this.status = status;
         this.appName = appName;
         this.codeRepos = codeRepos;
         this.codeBranch = codeBranch;
-    }
-
-    public String getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
     }
 
     public String getItemId() {
@@ -73,11 +55,19 @@ public class ReleaseItem {
         this.itemId = itemId;
     }
 
-    public ReleaseItemStatus getStatus() {
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(ReleaseItemStatus status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 
@@ -103,5 +93,21 @@ public class ReleaseItem {
 
     public void setCodeBranch(String codeBranch) {
         this.codeBranch = codeBranch;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }

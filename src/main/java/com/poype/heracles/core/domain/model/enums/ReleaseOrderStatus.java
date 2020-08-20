@@ -14,6 +14,15 @@ public enum ReleaseOrderStatus {
 
     private String name;
 
+    public static ReleaseOrderStatus getByCode(int code) {
+        for (ReleaseOrderStatus status : values()) {
+            if (status.getCode() == code) {
+                return status;
+            }
+        }
+        return null;
+    }
+
     ReleaseOrderStatus(int code, String name) {
         this.code = code;
         this.name = name;

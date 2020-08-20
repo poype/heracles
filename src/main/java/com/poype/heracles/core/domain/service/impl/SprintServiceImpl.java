@@ -38,8 +38,8 @@ public class SprintServiceImpl implements SprintService {
         List<AppOfSprint> appList = new ArrayList<>();
         for (AppOfSprintDto appOfSprintDto : sprintDtoList) {
             Application application = applicationRepository.queryByAppName(appOfSprintDto.getAppName());
-            AppOfSprint app = new AppOfSprint(appOfSprintDto.getAppName(), appOfSprintDto.getDevNames(),
-                    appOfSprintDto.getQaNames(), appOfSprintDto.getAppName() + releaseDate,
+            AppOfSprint app = new AppOfSprint(appOfSprintDto.getAppName(), appOfSprintDto.getDevList(),
+                    appOfSprintDto.getQaList(), appOfSprintDto.getAppName() + releaseDate,
                     application.getCodeRepository(), application.getApplicationType());
             appList.add(app);
         }

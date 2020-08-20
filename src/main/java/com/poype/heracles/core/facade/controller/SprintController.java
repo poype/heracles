@@ -51,11 +51,11 @@ public class SprintController {
                 AssertUtil.notBlank(request.getName(), PARAM_ILLEGAL, "版本名称不能为空");
                 AssertUtil.notBlank(request.getDescription(), PARAM_ILLEGAL, "版本描述不能为空");
                 AssertUtil.notBlank(request.getReleaseDate(), PARAM_ILLEGAL, "版本日期不能为空");
-                AssertUtil.notEmpty(request.getApps(), PARAM_ILLEGAL, "版本应用不能为空");
-                for (AppOfSprintDto app : request.getApps()) {
+                AssertUtil.notEmpty(request.getAppList(), PARAM_ILLEGAL, "版本应用不能为空");
+                for (AppOfSprintDto app : request.getAppList()) {
                     AssertUtil.notBlank(app.getAppName(), PARAM_ILLEGAL, "应用名字不能为空");
-                    AssertUtil.notEmpty(app.getDevNames(), PARAM_ILLEGAL, "必须制定至少一个研发人员");
-                    AssertUtil.notEmpty(app.getQaNames(), PARAM_ILLEGAL, "必须制定至少一个测试人员");
+                    AssertUtil.notEmpty(app.getDevList(), PARAM_ILLEGAL, "必须制定至少一个研发人员");
+                    AssertUtil.notEmpty(app.getQaList(), PARAM_ILLEGAL, "必须制定至少一个测试人员");
                 }
             }
 
@@ -63,7 +63,7 @@ public class SprintController {
             public void doService() {
                 String createUser = "poype";
                 String sprintId = sprintManager.createNewSprint(request.getName(), request.getDescription(),
-                        request.getReleaseDate(), request.getApps(), createUser);
+                        request.getReleaseDate(), request.getAppList(), createUser);
                 result.setSprintId(sprintId);
             }
         });

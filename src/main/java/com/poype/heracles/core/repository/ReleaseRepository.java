@@ -6,7 +6,7 @@ public interface ReleaseRepository {
 
     void saveReleaseOrder(ReleaseOrder releaseOrder);
 
-    void updateReleaseOrder(ReleaseOrder releaseOrder);
+    void updateReleaseOrderStatus(ReleaseOrder releaseOrder);
 
     ReleaseOrder queryByOrderId(String orderId);
 }
