@@ -1,5 +1,7 @@
 package com.poype.heracles.core.manager;
 
+import java.util.List;
+
 public interface ConfigFileManager {
 
     /**
@@ -7,5 +9,7 @@ public interface ConfigFileManager {
      * @param appId 应用Id
      */
     void generateConfigFileForApp(String appId);
+
+    List<String> queryAllHostNames();
 
 }

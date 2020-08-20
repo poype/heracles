@@ -164,9 +164,9 @@ public class ConfigFileServiceImpl implements ConfigFileService {
                 for (String title : titles) {
                     HostConfig hostConfig = hostConfigRepository.queryByConfigName(title);
                     if (envType == EnvironmentType.PROD || envType == EnvironmentType.RC) {
-                        hostNames.add(hostConfig.getProdHostName());
+                        hostNames.add(hostConfig.getProdHost());
                     } else {
-                        hostNames.add(hostConfig.getTestHostName());
+                        hostNames.add(hostConfig.getTestHost());
                     }
                 }
                 break;

@@ -13,12 +13,12 @@ public class HostConfig {
     /**
      * 生产环境域名
      */
-    private String prodHostName;
+    private String prodHost;
 
     /**
      * 测试环境域名
      */
-    private String testHostName;
+    private String testHost;
 
     public String getConfigName() {
         return configName;
@@ -28,19 +28,19 @@ public class HostConfig {
         this.configName = configName;
     }
 
-    public String getProdHostName() {
-        return prodHostName;
+    public String getProdHost() {
+        return prodHost;
     }
 
-    public void setProdHostName(String prodHostName) {
-        this.prodHostName = prodHostName;
+    public void setProdHost(String prodHost) {
+        this.prodHost = prodHost;
     }
 
-    public String getTestHostName() {
-        return testHostName;
+    public String getTestHost() {
+        return testHost;
     }
 
-    public void setTestHostName(String testHostName) {
-        this.testHostName = testHostName;
+    public void setTestHost(String testHost) {
+        this.testHost = testHost;
     }
 }

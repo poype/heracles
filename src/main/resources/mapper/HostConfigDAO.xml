@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.poype.heracles.core.repository.dao.HostConfigDAO">
+
+    <select id="queryAllHostNames" resultType="java.lang.String">
+        select config_name from host_config
+    </select>
+</mapper>

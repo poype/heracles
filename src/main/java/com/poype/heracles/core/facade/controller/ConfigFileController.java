@@ -6,6 +6,7 @@ import com.poype.heracles.common.template.ExecuteCallback;
 import com.poype.heracles.common.template.ExecuteTemplate;
 import com.poype.heracles.common.util.AssertUtil;
 import com.poype.heracles.common.util.ThreadLocalHolder;
+import com.poype.heracles.core.facade.result.QueryAllHostConfigNameResult;
 import com.poype.heracles.core.manager.ConfigFileManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+
+import java.util.List;
 
 import static com.poype.heracles.common.enums.BusinessErrorCode.PARAM_ILLEGAL;
 
@@ -45,6 +48,25 @@ public class ConfigFileController {
             @Override
             public void doService() {
                 configFileManager.generateConfigFileForApp(appId);
+            }
+        });
+
+        return result;
+    }
+
+    @RequestMapping(value = "/queryAllHostName", method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public QueryAllHostConfigNameResult queryAllHostName() {
+        ThreadLocalHolder.setBizScene(BizScene.QUERY_ALL_HOST);
+
+        final QueryAllHostConfigNameResult result = new QueryAllHostConfigNameResult();
+
+        executeTemplate.execute(result, new ExecuteCallback() {
+
+            @Override
+            public void doService() {
+                List<String> hostNames = configFileManager.queryAllHostNames();
+                result.setHostNameList(hostNames);
             }
         });
 

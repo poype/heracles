@@ -30,6 +30,8 @@ public enum BizScene {
     QUERY_ALL_APP_NAMES("0013", "query all app names"),
 
     UPDATE_SPRINT("0014", "update sprint"),
+
+    QUERY_ALL_HOST("0015", "query all host"),
     ;
 
     /** 场景编码 */
