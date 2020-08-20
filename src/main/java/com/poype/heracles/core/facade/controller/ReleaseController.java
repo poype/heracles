@@ -11,6 +11,7 @@ import com.poype.heracles.core.facade.result.CreateReleaseOrderResult;
 import com.poype.heracles.core.facade.result.QueryReleaseOrderStatusResult;
 import com.poype.heracles.core.facade.result.ReleaseOrderView;
 import com.poype.heracles.core.manager.ReleaseManager;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -41,14 +42,20 @@ public class ReleaseController {
             @Override
             public void check() {
                 AssertUtil.notBlank(request.getSprintId(), PARAM_ILLEGAL);
-                AssertUtil.notBlank(request.getApp(), PARAM_ILLEGAL);
             }
 
             @Override
             public void doService() {
                 String operator = "liudongliang214";
-                String releaseOrderId = releaseManager.createReleaseOrderForSprint(request.getSprintId(),
-                        request.getApp(), operator);
+
+                String releaseOrderId;
+
+                if (StringUtils.isBlank(request.getApp())) {
+                    releaseOrderId = releaseManager.createReleaseOrderForSprint(request.getSprintId(), operator);
+                } else {
+                    releaseOrderId = releaseManager.createReleaseOrderForSprint(request.getSprintId(),
+                            request.getApp(), operator);
+                }
                 result.setReleaseOrderId(releaseOrderId);
             }
         });
