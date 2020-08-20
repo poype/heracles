@@ -20,6 +20,7 @@ import com.poype.heracles.core.domain.model.enums.HardwareLevelEnum;
 import com.poype.heracles.core.facade.request.AddApplicationRequest;
 import com.poype.heracles.core.facade.request.UpdateJavaAppInfoRequest;
 import com.poype.heracles.core.facade.result.CreateApplicationResult;
+import com.poype.heracles.core.facade.result.QueryAllAppNameResult;
 import com.poype.heracles.core.facade.result.QueryApplicationDetailResult;
 import com.poype.heracles.core.facade.result.QueryApplicationSimpleListResult;
 import com.poype.heracles.core.manager.ApplicationManager;
@@ -212,6 +213,26 @@ public class ApplicationController {
             @Override
             public void doService() {
                 applicationManager.updateJavaAppInfo(request.getAppId(), request.getJavaAppInfo());
+            }
+        });
+
+        return result;
+    }
+
+    @RequestMapping(value = "/queryAllNames", method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public QueryAllAppNameResult queryAllNames() {
+
+        ThreadLocalHolder.setBizScene(BizScene.QUERY_ALL_APP_NAMES);
+
+        final QueryAllAppNameResult result = new QueryAllAppNameResult();
+
+        executeTemplate.execute(result, new ExecuteCallback() {
+
+            @Override
+            public void doService() {
+                List<String> appNameList = applicationManager.queryAllNames();
+                result.setAppNameList(appNameList);
             }
         });
 

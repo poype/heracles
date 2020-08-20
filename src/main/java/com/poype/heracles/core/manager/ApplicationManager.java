@@ -44,4 +44,9 @@ public interface ApplicationManager {
      * @param javaAppInfo java部分信息
      */
     void updateJavaAppInfo(String appId, JavaApplicationDto javaAppInfo);
+
+    /**
+     * 查询所有应用的名字
+     */
+    List<String> queryAllNames();
 }

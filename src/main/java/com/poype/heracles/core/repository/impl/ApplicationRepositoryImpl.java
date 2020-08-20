@@ -110,6 +110,11 @@ public class ApplicationRepositoryImpl implements ApplicationRepository {
         return applicationDAO.queryTotal();
     }
 
+    @Override
+    public List<String> queryAllNames() {
+        return applicationDAO.queryAllNames();
+    }
+
     private JavaApplication recoverJavaApplicationModel(ApplicationDO applicationDO,
                                                         JavaApplicationDO javaApplicationDO,
                                                         List<ApplicationConfigDO> configDOList) {

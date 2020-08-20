@@ -34,4 +34,6 @@ public interface ApplicationDAO {
     void deleteConfigsByAppId(@Param("applicationId") String applicationId);
 
     int queryTotal();
+
+    List<String> queryAllNames();
 }

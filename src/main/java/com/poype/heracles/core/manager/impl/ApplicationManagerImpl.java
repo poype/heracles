@@ -62,4 +62,9 @@ public class ApplicationManagerImpl implements ApplicationManager {
     public void updateJavaAppInfo(String appId, JavaApplicationDto javaAppInfo) {
         applicationService.updateJavaAppInfo(appId, javaAppInfo);
     }
+
+    @Override
+    public List<String> queryAllNames() {
+        return applicationRepository.queryAllNames();
+    }
 }

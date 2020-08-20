@@ -26,6 +26,8 @@ public enum BizScene {
     UPDATE_JAVA_APP_INFO("0011", "update java app info"),
 
     SPRINT_QUERY_SIMPLE_LIST("0012", "sprint query simple list"),
+
+    QUERY_ALL_APP_NAMES("0013", "query all app names"),
     ;
 
     /** 场景编码 */

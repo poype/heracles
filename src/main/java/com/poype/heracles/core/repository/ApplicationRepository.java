@@ -48,4 +48,6 @@ public interface ApplicationRepository {
      * 总数
      */
     int queryTotal();
+
+    List<String> queryAllNames();
 }

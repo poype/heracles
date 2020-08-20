@@ -91,4 +91,8 @@
     <select id="queryTotal" resultType="java.lang.Integer">
         select count(*) from application
     </select>
+
+    <select id="queryAllNames" resultType="java.lang.String">
+        select application_name from application
+    </select>
 </mapper>
