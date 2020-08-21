@@ -4,6 +4,7 @@ import com.poype.heracles.common.enums.BusinessErrorCode;
 import com.poype.heracles.common.util.AssertUtil;
 import com.poype.heracles.core.domain.model.ReleaseItem;
 import com.poype.heracles.core.domain.model.ReleaseOrder;
+import com.poype.heracles.core.domain.model.dto.SimpleReleaseOrderDto;
 import com.poype.heracles.core.domain.model.enums.SprintStatus;
 import com.poype.heracles.core.domain.model.sprint.Sprint;
 import com.poype.heracles.core.domain.service.EventService;
@@ -12,6 +13,7 @@ import com.poype.heracles.core.domain.service.SprintService;
 import com.poype.heracles.core.facade.result.ReleaseItemView;
 import com.poype.heracles.core.facade.result.ReleaseOrderView;
 import com.poype.heracles.core.manager.ReleaseManager;
+import com.poype.heracles.core.repository.ReleaseRepository;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -27,6 +29,9 @@ public class ReleaseManagerImpl implements ReleaseManager {
 
     @Resource
     private ReleaseService releaseService;
+
+    @Resource
+    private ReleaseRepository releaseRepository;
 
     @Resource
     private EventService eventService;
@@ -77,5 +82,10 @@ public class ReleaseManagerImpl implements ReleaseManager {
         }
         releaseOrderView.setItemList(itemViewList);
         return releaseOrderView;
+    }
+
+    @Override
+    public List<SimpleReleaseOrderDto> queryReleaseOrderListBySprintId(String sprintId) {
+        return releaseRepository.queryReleaseOrderListBySprintId(sprintId);
     }
 }

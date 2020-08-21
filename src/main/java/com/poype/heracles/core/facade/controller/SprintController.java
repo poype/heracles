@@ -134,6 +134,8 @@ public class SprintController {
                     appOfSprintView.setCodeRepos(appOfSprint.getCodeRepository());
                     appOfSprintView.setAppType(appOfSprint.getAppType().getName());
                     appOfSprintView.setStatus(appOfSprint.getStatus().getName());
+                    appOfSprintView.setDevList(appOfSprint.getDevList());
+                    appOfSprintView.setQaList(appOfSprint.getQaList());
                     appList.add(appOfSprintView);
                 }
                 sprintView.setAppList(appList);

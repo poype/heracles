@@ -54,6 +54,11 @@ public class ReleaseOrder {
      */
     private Date releaseDate;
 
+    /**
+     * 关联的版本Id
+     */
+    private String sprintId;
+
     public void updateItemStatus(String itemId, ReleaseItemStatus status) {
         for (ReleaseItem item : this.releaseItems) {
             if (item.getItemId().equals(itemId)) {
@@ -84,19 +89,8 @@ public class ReleaseOrder {
         this.releaseItems.add(item);
     }
 
-    /**
-     * 添加一个版本中的应用到发布单中
-     * @param appName 应用名字
-     * @param codeRepository 代码仓库
-     * @param codeBranch 代码分支
-     */
-    public void addAppToRelease(String appName, String codeRepository, String codeBranch) {
-        ReleaseItem item = new ReleaseItem(this.orderId, appName, codeRepository, codeBranch);
-        this.releaseItems.add(item);
-    }
-
     public ReleaseOrder(String releaseName, String description, String envName,
-                        String operator) {
+                        String operator, String sprintId) {
         this.orderId = IdUtil.generateBizId();
         this.status = ReleaseOrderStatus.INIT;
         this.releaseDate = new Date();
@@ -105,6 +99,7 @@ public class ReleaseOrder {
         this.description = description;
         this.envName = envName;
         this.operator = operator;
+        this.sprintId = sprintId;
     }
 
     public ReleaseOrder(String orderId, String releaseName, String description, List<ReleaseItem> releaseItems,
@@ -181,5 +176,13 @@ public class ReleaseOrder {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getSprintId() {
+        return sprintId;
+    }
+
+    public void setSprintId(String sprintId) {
+        this.sprintId = sprintId;
     }
 }

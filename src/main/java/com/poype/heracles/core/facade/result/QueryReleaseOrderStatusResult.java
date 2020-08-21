@@ -4,21 +4,21 @@ import com.poype.heracles.common.dto.BaseResult;
 
 public class QueryReleaseOrderStatusResult extends BaseResult {
 
-    private ReleaseOrderView releaseOrderView;
+    private ReleaseOrderView releaseOrder;
 
     @Override
     public String toString() {
         return "QueryReleaseOrderStatusResult{" +
-                "releaseOrderView=" + releaseOrderView +
+                "releaseOrder=" + releaseOrder +
                 ", " + super.toString() +
                 '}';
     }
 
-    public ReleaseOrderView getReleaseOrderView() {
-        return releaseOrderView;
+    public ReleaseOrderView getReleaseOrder() {
+        return releaseOrder;
     }
 
-    public void setReleaseOrderView(ReleaseOrderView releaseOrderView) {
-        this.releaseOrderView = releaseOrderView;
+    public void setReleaseOrder(ReleaseOrderView releaseOrder) {
+        this.releaseOrder = releaseOrder;
     }
 }

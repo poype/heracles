@@ -23,4 +23,6 @@ public interface ReleaseDAO {
     void updateReleaseOrderStatus(@Param("orderId") String orderId, @Param("status") int status);
 
     void updateReleaseItemStatus(@Param("itemId") String itemId, @Param("status") int status);
+
+    List<ReleaseOrderDO> queryBySprintId(@Param("sprintId") String sprintId);
 }

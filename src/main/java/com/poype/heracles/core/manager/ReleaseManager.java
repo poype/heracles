@@ -1,6 +1,9 @@
 package com.poype.heracles.core.manager;
 
+import com.poype.heracles.core.domain.model.dto.SimpleReleaseOrderDto;
 import com.poype.heracles.core.facade.result.ReleaseOrderView;
+
+import java.util.List;
 
 public interface ReleaseManager {
 
@@ -26,4 +29,11 @@ public interface ReleaseManager {
      * @param releaseOrderId 发布单Id
      */
     ReleaseOrderView queryReleaseOrderStatus(String releaseOrderId);
+
+    /**
+     * 查询一个版本所有发布单简要信息列表
+     * @param sprintId 版本Id
+     * @return 发布单简要信息列表
+     */
+    List<SimpleReleaseOrderDto> queryReleaseOrderListBySprintId(String sprintId);
 }

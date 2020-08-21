@@ -1,6 +1,7 @@
 package com.poype.heracles.core.repository.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.poype.heracles.core.domain.model.ReleaseOrder;
 import com.poype.heracles.core.domain.model.dto.SimpleSprintDto;
 import com.poype.heracles.core.domain.model.enums.AppOfSprintStatus;
 import com.poype.heracles.core.domain.model.enums.ApplicationType;
@@ -35,8 +36,8 @@ public class SprintRepositoryImpl implements SprintRepository {
         for (AppOfSprint appOfSprint : sprint.getApplications()) {
             AppOfSprintDO appOfSprintDO = new AppOfSprintDO(appOfSprint.getRelationId(), sprint.getSprintId(),
                     appOfSprint.getApp(), appOfSprint.getAppType().getCode(), appOfSprint.getCodeRepository(),
-                    appOfSprint.getCodeBranch(), JSON.toJSONString(appOfSprint.getDevSet()),
-                    JSON.toJSONString(appOfSprint.getQaSet()), appOfSprint.getStatus().getCode());
+                    appOfSprint.getCodeBranch(), JSON.toJSONString(appOfSprint.getDevList()),
+                    JSON.toJSONString(appOfSprint.getQaList()), appOfSprint.getStatus().getCode());
             sprintDAO.saveAppOfSprint(appOfSprintDO);
         }
     }
@@ -110,8 +111,8 @@ public class SprintRepositoryImpl implements SprintRepository {
     public void addNewAppForSprint(String sprintId, AppOfSprint appOfSprint) {
         AppOfSprintDO appOfSprintDO = new AppOfSprintDO(appOfSprint.getRelationId(), sprintId,
                 appOfSprint.getApp(), appOfSprint.getAppType().getCode(), appOfSprint.getCodeRepository(),
-                appOfSprint.getCodeBranch(), JSON.toJSONString(appOfSprint.getDevSet()),
-                JSON.toJSONString(appOfSprint.getQaSet()), appOfSprint.getStatus().getCode());
+                appOfSprint.getCodeBranch(), JSON.toJSONString(appOfSprint.getDevList()),
+                JSON.toJSONString(appOfSprint.getQaList()), appOfSprint.getStatus().getCode());
         sprintDAO.saveAppOfSprint(appOfSprintDO);
     }
 }

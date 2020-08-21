@@ -34,6 +34,8 @@ public enum BusinessErrorCode {
     APP_NOT_FOUND("010", INFO, "APP NOT FOUND"),
 
     ILLEGAL_SPRINT_STATUS("011", INFO, "illegal sprint status"),
+
+    ILLEGAL_ENVIRONMENT("012", INFO, "illegal environment"),
     ;
 
     private final String specificCode;

@@ -40,16 +40,29 @@ public class ReleaseServiceImpl implements ReleaseService {
         AppOfSprint appOfSprint = findAppFromSprint(sprint, app);
         AssertUtil.notNull(appOfSprint, BusinessErrorCode.PARAM_ILLEGAL);
 
-        // 默认环境是UAT
-        String envName = AppOfSprintStatus.UAT.getName();
-        if (appOfSprint.getStatus() == AppOfSprintStatus.SIT) {
+        // 根据sprint状态和其中app的状态选择发布的环境
+        String envName = "";
+        if (appOfSprint.getStatus().getCode() <= AppOfSprintStatus.SIT.getCode()) {
+            // 在进入UAT之前，如果发布都是发在对应的Test环境
             envName = sprint.getSitEnvName();
+        } else if (appOfSprint.getStatus() == AppOfSprintStatus.UAT) {
+            envName = AppOfSprintStatus.UAT.getName();
+        } else {
+            // 应用的测试已完成，根据sprint的状态判断发布环境，测试sprint的状态一定是已完成测试的
+            AssertUtil.isTrue(sprint.getStatus().getCode() >= SprintStatus.FINISH_TEST.getCode(),
+                    BusinessErrorCode.ILLEGAL_SPRINT_STATUS);
+            if (sprint.getStatus().getCode() <= SprintStatus.RC.getCode()) {
+                envName = SprintStatus.RC.getName();
+            } else if (sprint.getStatus().getCode() < SprintStatus.FINISH_PROD_VERIFY.getCode()) {
+                envName = SprintStatus.PROD.getName();
+            }
         }
+        AssertUtil.notBlank(envName, BusinessErrorCode.ILLEGAL_ENVIRONMENT);
 
         String releaseName = sprint.getSprintName() + "-" + app;
         String description = sprint.getSprintName() + "-" + app + "-" + envName + "-release";
 
-        ReleaseOrder releaseOrder = new ReleaseOrder(releaseName, description, envName, operator);
+        ReleaseOrder releaseOrder = new ReleaseOrder(releaseName, description, envName, operator, sprint.getSprintId());
 
         Application application = applicationRepository.queryByAppName(appOfSprint.getApp());
         releaseOrder.addAppToRelease(appOfSprint, application.getCodeRepository());
@@ -74,7 +87,7 @@ public class ReleaseServiceImpl implements ReleaseService {
         String releaseName = sprint.getSprintName() + "-" + envName;
         String description = sprint.getSprintName() + "-" + envName + "-whole-release";
 
-        ReleaseOrder releaseOrder = new ReleaseOrder(releaseName, description, envName, operator);
+        ReleaseOrder releaseOrder = new ReleaseOrder(releaseName, description, envName, operator, sprint.getSprintId());
 
         for (AppOfSprint appOfSprint : sprint.getApplications()) {
             Application application = applicationRepository.queryByAppName(appOfSprint.getApp());

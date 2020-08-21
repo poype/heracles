@@ -10,11 +10,12 @@
         <result column="status" property="status"/>
         <result column="operator" property="operator"/>
         <result column="release_date" property="releaseDate"/>
+        <result column="sprint_id" property="sprintId"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
     </resultMap>
 
-    <resultMap id="release_item_result_map" type="com.poype.heracles.core.repository.dao.model.ReleaseOrderDO">
+    <resultMap id="release_item_result_map" type="com.poype.heracles.core.repository.dao.model.ReleaseItemDO">
         <result column="item_id" property="itemId"/>
         <result column="order_id" property="orderId"/>
         <result column="status" property="status"/>
@@ -26,8 +27,8 @@
     </resultMap>
 
     <insert id="saveReleaseOrder" parameterType="com.poype.heracles.core.repository.dao.model.ReleaseOrderDO">
-        insert into release_order(order_id, release_name, description, env_name, status, operator, release_date, create_time, update_time)
-        values (#{orderId}, #{releaseName}, #{description}, #{envName}, #{status}, #{operator}, #{releaseDate}, now(), now())
+        insert into release_order(order_id, release_name, description, env_name, status, operator, release_date, sprint_id, create_time, update_time)
+        values (#{orderId}, #{releaseName}, #{description}, #{envName}, #{status}, #{operator}, #{releaseDate}, #{sprintId}, now(), now())
     </insert>
 
     <insert id="saveReleaseItem" parameterType="com.poype.heracles.core.repository.dao.model.ReleaseItemDO">
@@ -41,6 +42,10 @@
 
     <select id="queryReleaseItemListByOrderId" resultMap="release_item_result_map">
         select * from release_item where order_id = #{orderId}
+    </select>
+
+    <select id="queryBySprintId" resultMap="release_order_result_map">
+        select * from release_order where sprint_id = #{sprintId}
     </select>
 
     <update id="updateReleaseOrderStatus">

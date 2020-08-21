@@ -2,6 +2,7 @@ package com.poype.heracles.core.repository.impl;
 
 import com.poype.heracles.core.domain.model.ReleaseItem;
 import com.poype.heracles.core.domain.model.ReleaseOrder;
+import com.poype.heracles.core.domain.model.dto.SimpleReleaseOrderDto;
 import com.poype.heracles.core.domain.model.enums.ReleaseItemStatus;
 import com.poype.heracles.core.domain.model.enums.ReleaseOrderStatus;
 import com.poype.heracles.core.repository.ReleaseRepository;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Repository("releaseRepository")
@@ -26,7 +28,8 @@ public class ReleaseRepositoryImpl implements ReleaseRepository {
     public void saveReleaseOrder(ReleaseOrder releaseOrder) {
         ReleaseOrderDO releaseOrderDO = new ReleaseOrderDO(releaseOrder.getOrderId(),
                 releaseOrder.getReleaseName(), releaseOrder.getDescription(), releaseOrder.getEnvName(),
-                releaseOrder.getStatus().getCode(), releaseOrder.getOperator(), releaseOrder.getReleaseDate());
+                releaseOrder.getStatus().getCode(), releaseOrder.getOperator(), releaseOrder.getReleaseDate(),
+                releaseOrder.getSprintId());
 
         releaseDAO.saveReleaseOrder(releaseOrderDO);
         for (ReleaseItem item : releaseOrder.getReleaseItems()) {
@@ -68,5 +71,25 @@ public class ReleaseRepositoryImpl implements ReleaseRepository {
                 releaseOrderDO.getOperator(),
                 releaseOrderDO.getReleaseDate());
         return releaseOrder;
+    }
+
+    @Override
+    public List<SimpleReleaseOrderDto> queryReleaseOrderListBySprintId(String sprintId) {
+        List<ReleaseOrderDO> releaseOrderDOList = releaseDAO.queryBySprintId(sprintId);
+
+        List<SimpleReleaseOrderDto> dtoList = new ArrayList<>();
+        for (ReleaseOrderDO orderDO : releaseOrderDOList) {
+            SimpleReleaseOrderDto dto = new SimpleReleaseOrderDto(
+                    orderDO.getOrderId(),
+                    orderDO.getReleaseName(),
+                    orderDO.getDescription(),
+                    orderDO.getEnvName(),
+                    ReleaseOrderStatus.getByCode(orderDO.getStatus()).getName(),
+                    orderDO.getOperator(),
+                    orderDO.getReleaseDate()
+                    );
+            dtoList.add(dto);
+        }
+        return dtoList;
     }
 }

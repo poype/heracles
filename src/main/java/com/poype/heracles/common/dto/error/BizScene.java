@@ -32,6 +32,8 @@ public enum BizScene {
     UPDATE_SPRINT("0014", "update sprint"),
 
     QUERY_ALL_HOST("0015", "query all host"),
+
+    QUERY_SIMPLE_RELEASE_OF_SPRINT("0016", "query all host"),
     ;
 
     /** 场景编码 */

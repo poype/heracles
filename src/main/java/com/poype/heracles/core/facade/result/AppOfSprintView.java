@@ -1,5 +1,7 @@
 package com.poype.heracles.core.facade.result;
 
+import java.util.List;
+
 /**
  * 单个应用在版本中的状态
  */
@@ -30,6 +32,10 @@ public class AppOfSprintView {
      */
     private String status;
 
+    private List<String> devList;
+
+    private List<String> qaList;
+
     @Override
     public String toString() {
         return "AppOfSprintView{" +
@@ -38,6 +44,8 @@ public class AppOfSprintView {
                 ", codeRepos='" + codeRepos + '\'' +
                 ", codeBranch='" + codeBranch + '\'' +
                 ", status='" + status + '\'' +
+                ", devList=" + devList +
+                ", qaList=" + qaList +
                 '}';
     }
 
@@ -79,5 +87,21 @@ public class AppOfSprintView {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public List<String> getDevList() {
+        return devList;
+    }
+
+    public void setDevList(List<String> devList) {
+        this.devList = devList;
+    }
+
+    public List<String> getQaList() {
+        return qaList;
+    }
+
+    public void setQaList(List<String> qaList) {
+        this.qaList = qaList;
     }
 }

@@ -1,9 +1,8 @@
-package com.poype.heracles.core.repository.dao.model;
+package com.poype.heracles.core.domain.model.dto;
 
 import java.util.Date;
 
-public class ReleaseOrderDO {
-
+public class SimpleReleaseOrderDto {
     /**
      * 发布单Id
      */
@@ -15,19 +14,19 @@ public class ReleaseOrderDO {
     private String releaseName;
 
     /**
-     * 描述
+     * 发布描述
      */
     private String description;
 
     /**
-     * 发布环境
+     * 环境名称
      */
     private String envName;
 
     /**
-     * 整体发布状态
+     * 发布状态
      */
-    private int status;
+    private String status;
 
     /**
      * 操作者
@@ -39,17 +38,11 @@ public class ReleaseOrderDO {
      */
     private Date releaseDate;
 
-    /**
-     * 关联的版本Id
-     */
-    private String sprintId;
+    public SimpleReleaseOrderDto() {
+    }
 
-    private Date createTime;
-
-    private Date updateTime;
-
-    public ReleaseOrderDO(String orderId, String releaseName, String description, String envName, int status,
-                          String operator, Date releaseDate, String sprintId) {
+    public SimpleReleaseOrderDto(String orderId, String releaseName, String description, String envName,
+                                 String status, String operator, Date releaseDate) {
         this.orderId = orderId;
         this.releaseName = releaseName;
         this.description = description;
@@ -57,7 +50,19 @@ public class ReleaseOrderDO {
         this.status = status;
         this.operator = operator;
         this.releaseDate = releaseDate;
-        this.sprintId = sprintId;
+    }
+
+    @Override
+    public String toString() {
+        return "SimpleReleaseOrderView{" +
+                "orderId='" + orderId + '\'' +
+                ", releaseName='" + releaseName + '\'' +
+                ", description='" + description + '\'' +
+                ", envName='" + envName + '\'' +
+                ", status='" + status + '\'' +
+                ", operator='" + operator + '\'' +
+                ", releaseDate='" + releaseDate + '\'' +
+                '}';
     }
 
     public String getOrderId() {
@@ -92,11 +97,11 @@ public class ReleaseOrderDO {
         this.envName = envName;
     }
 
-    public int getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -114,29 +119,5 @@ public class ReleaseOrderDO {
 
     public void setReleaseDate(Date releaseDate) {
         this.releaseDate = releaseDate;
-    }
-
-    public String getSprintId() {
-        return sprintId;
-    }
-
-    public void setSprintId(String sprintId) {
-        this.sprintId = sprintId;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
     }
 }

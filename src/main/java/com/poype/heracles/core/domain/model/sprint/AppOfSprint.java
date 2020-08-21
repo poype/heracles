@@ -39,39 +39,39 @@ public class AppOfSprint {
     /**
      * 研发人员集合
      */
-    private List<String> devSet;
+    private List<String> devList;
 
     /**
      * 测试人员集合
      */
-    private List<String> qaSet;
+    private List<String> qaList;
 
     /**
      * 应用状态
      */
     private AppOfSprintStatus status;
 
-    public AppOfSprint(String app, List<String> devSet, List<String> qaSet, String codeBranch,
+    public AppOfSprint(String app, List<String> devList, List<String> qaList, String codeBranch,
                        String codeRepository, ApplicationType appType) {
         this.relationId = IdUtil.generateBizId();
         this.status = AppOfSprintStatus.INIT;
         this.app = app;
-        this.devSet = devSet;
-        this.qaSet = qaSet;
+        this.devList = devList;
+        this.qaList = qaList;
         this.codeBranch = codeBranch;
         this.codeRepository = codeRepository;
         this.appType = appType;
     }
 
     public AppOfSprint(String relationId, String app, ApplicationType appType, String codeRepository,
-                       String codeBranch, List<String> devSet, List<String> qaSet, AppOfSprintStatus status) {
+                       String codeBranch, List<String> devList, List<String> qaList, AppOfSprintStatus status) {
         this.relationId = relationId;
         this.app = app;
         this.appType = appType;
         this.codeRepository = codeRepository;
         this.codeBranch = codeBranch;
-        this.devSet = devSet;
-        this.qaSet = qaSet;
+        this.devList = devList;
+        this.qaList = qaList;
         this.status = status;
     }
 
@@ -99,20 +99,20 @@ public class AppOfSprint {
         this.codeBranch = codeBranch;
     }
 
-    public List<String> getDevSet() {
-        return devSet;
+    public List<String> getDevList() {
+        return devList;
     }
 
-    public void setDevSet(List<String> devSet) {
-        this.devSet = devSet;
+    public void setDevList(List<String> devList) {
+        this.devList = devList;
     }
 
-    public List<String> getQaSet() {
-        return qaSet;
+    public List<String> getQaList() {
+        return qaList;
     }
 
-    public void setQaSet(List<String> qaSet) {
-        this.qaSet = qaSet;
+    public void setQaList(List<String> qaList) {
+        this.qaList = qaList;
     }
 
     public AppOfSprintStatus getStatus() {
