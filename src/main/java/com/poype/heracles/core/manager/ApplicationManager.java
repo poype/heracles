@@ -1,7 +1,7 @@
 package com.poype.heracles.core.manager;
 
-import com.poype.heracles.core.domain.model.application.Application;
 import com.poype.heracles.core.domain.model.dto.JavaApplicationDto;
+import com.poype.heracles.core.facade.request.AddApplicationRequest;
 
 import java.util.List;
 import java.util.Map;
@@ -30,7 +30,7 @@ public interface ApplicationManager {
      * @param appId appId
      * @return 应用列表
      */
-    Application queryApplicationDetailById(String appId);
+    AddApplicationRequest queryApplicationDetailById(String appId);
 
     /**
      * 分页查询应用的简要信息

@@ -17,7 +17,7 @@ public interface ApplicationDAO {
 
     void saveJavaApplication(JavaApplicationDO javaApplicationDO);
 
-    void saveApplicationConfig(ApplicationConfigDO applicationConfigDO);
+    void saveApplicationConfigList(@Param("list") List<ApplicationConfigDO> list);
 
     ApplicationDO queryApplicationById(@Param("applicationId") String applicationId);
 

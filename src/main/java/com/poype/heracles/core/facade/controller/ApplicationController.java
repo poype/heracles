@@ -1,19 +1,13 @@
 package com.poype.heracles.core.facade.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.TypeReference;
 import com.poype.heracles.common.dto.BaseResult;
 import com.poype.heracles.common.dto.error.BizScene;
 import com.poype.heracles.common.template.ExecuteCallback;
 import com.poype.heracles.common.template.ExecuteTemplate;
 import com.poype.heracles.common.util.AssertUtil;
 import com.poype.heracles.common.util.ThreadLocalHolder;
-import com.poype.heracles.core.domain.model.application.Application;
-import com.poype.heracles.core.domain.model.application.JavaApplication;
-import com.poype.heracles.core.domain.model.application.config.ApplicationConfig;
 import com.poype.heracles.core.domain.model.dto.JavaApplicationDto;
 import com.poype.heracles.core.domain.model.dto.SimpleApplicationDto;
-import com.poype.heracles.core.domain.model.enums.ApplicationConfigTypeEnum;
 import com.poype.heracles.core.domain.model.enums.ApplicationType;
 import com.poype.heracles.core.domain.model.enums.EnvironmentType;
 import com.poype.heracles.core.domain.model.enums.HardwareLevelEnum;
@@ -26,10 +20,10 @@ import com.poype.heracles.core.facade.result.QueryApplicationSimpleListResult;
 import com.poype.heracles.core.manager.ApplicationManager;
 import com.poype.heracles.core.repository.integration.GitClient;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -105,38 +99,8 @@ public class ApplicationController {
 
             @Override
             public void doService() {
-                Application app =
+                AddApplicationRequest appView =
                         applicationManager.queryApplicationDetailById(appId);
-
-                JavaApplication javaApp = (JavaApplication) app;
-                JavaApplicationDto javaApplicationDto = new JavaApplicationDto();
-                List<ApplicationConfig> configs = app.getConfigs();
-                for (ApplicationConfig config : configs) {
-                    if (config.getConfigType() == ApplicationConfigTypeEnum.HARDWARE_LEVEL) {
-                        Map<String, String> hardwareLevels =
-                                JSON.parseObject(config.getConfigValue(), new TypeReference<Map<String, String>>(){});
-                        javaApplicationDto.setHardwareLevels(hardwareLevels);
-                    } else if (config.getConfigType() == ApplicationConfigTypeEnum.HOST) {
-                        List<String> hostConfigNames =
-                                JSON.parseArray(config.getConfigValue(), String.class);
-                        javaApplicationDto.setHostConfigNames(hostConfigNames);
-                    }
-                }
-                javaApplicationDto.setBaseCodeBranch(javaApp.getBaseCodeBranch());
-                javaApplicationDto.setConfigFilePath(javaApp.getConfigFilePath());
-                javaApplicationDto.setJarPath(javaApp.getJarPath());
-                javaApplicationDto.setPomPath(javaApp.getPomPath());
-                javaApplicationDto.setMvnCommand(javaApp.getMvnCommand());
-
-                List<String> devList = new ArrayList<>();
-                List<String> qaList = new ArrayList<>();
-                devList.addAll(app.getDevSet());
-                qaList.addAll(app.getQaSet());
-
-                AddApplicationRequest appView = new AddApplicationRequest(app.getApplicationName(),
-                        app.getApplicationType().getName(), app.getDomainId(), app.getDescription(),
-                        app.getDevOwner(), app.getQaOwner(), app.getBelongSystem(), app.getBelongBusiness(),
-                        app.getCodeRepository(), devList, qaList, javaApplicationDto);
                 result.setApp(appView);
             }
         });
@@ -243,7 +207,7 @@ public class ApplicationController {
         AssertUtil.notNull(javaAppInfo, PARAM_ILLEGAL, "缺少Java应用必要信息");
 
         Map<String, String> hardwareLevels = javaAppInfo.getHardwareLevels();
-        if (!hardwareLevels.isEmpty()) {
+        if (!CollectionUtils.isEmpty(hardwareLevels)) {
             for (Map.Entry<String, String> entry : javaAppInfo.getHardwareLevels().entrySet()) {
                 AssertUtil.isTrue(EnvironmentType.getByName(entry.getKey()) != null, PARAM_ILLEGAL,
                         "环境名称不正确");

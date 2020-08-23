@@ -42,7 +42,7 @@ public class ApplicationDO {
     /**
      * 开发成员
      */
-    private String devs;
+    private String devS;
 
     /**
      * 测试owner
@@ -52,7 +52,7 @@ public class ApplicationDO {
     /**
      * 测试成员
      */
-    private String qas;
+    private String qaS;
 
     /**
      * 所属子系统
@@ -124,12 +124,12 @@ public class ApplicationDO {
         this.devOwner = devOwner;
     }
 
-    public String getDevs() {
-        return devs;
+    public String getDevS() {
+        return devS;
     }
 
-    public void setDevs(String devs) {
-        this.devs = devs;
+    public void setDevS(String devS) {
+        this.devS = devS;
     }
 
     public String getQaOwner() {
@@ -140,12 +140,12 @@ public class ApplicationDO {
         this.qaOwner = qaOwner;
     }
 
-    public String getQas() {
-        return qas;
+    public String getQaS() {
+        return qaS;
     }
 
-    public void setQas(String qas) {
-        this.qas = qas;
+    public void setQaS(String qaS) {
+        this.qaS = qaS;
     }
 
     public String getBelongSystem() {

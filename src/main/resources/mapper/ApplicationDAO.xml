@@ -10,9 +10,9 @@
         <result column="description" property="description"/>
         <result column="code_repository" property="codeRepository"/>
         <result column="dev_owner" property="devOwner"/>
-        <result column="devs" property="devs"/>
+        <result column="dev_s" property="devS"/>
         <result column="qa_owner" property="qaOwner"/>
-        <result column="qas" property="qas"/>
+        <result column="qa_s" property="qaS"/>
         <result column="belong_system" property="belongSystem"/>
         <result column="belong_business" property="belongBusiness"/>
         <result column="create_time" property="createTime"/>
@@ -41,9 +41,9 @@
     
     <insert id="saveApplication" parameterType="com.poype.heracles.core.repository.dao.model.ApplicationDO">
         insert into application(application_id, domain_id, application_name, application_type, description,
-        code_repository, dev_owner, devs, qa_owner, qas, belong_system, belong_business, create_time, update_time)
+        code_repository, dev_owner, dev_s, qa_owner, qa_s, belong_system, belong_business, create_time, update_time)
         values (#{applicationId}, #{domainId}, #{applicationName}, #{applicationType}, #{description},
-        #{codeRepository}, #{devOwner}, #{devs}, #{qaOwner}, #{qas}, #{belongSystem}, #{belongBusiness}, now(), now())
+        #{codeRepository}, #{devOwner}, #{devS}, #{qaOwner}, #{qaS}, #{belongSystem}, #{belongBusiness}, now(), now())
     </insert>
 
     <insert id="saveJavaApplication" parameterType="com.poype.heracles.core.repository.dao.model.JavaApplicationDO">
@@ -53,9 +53,12 @@
         #{mvnCommand}, now(), now())
     </insert>
 
-    <insert id="saveApplicationConfig" parameterType="com.poype.heracles.core.repository.dao.model.ApplicationConfigDO">
+    <insert id="saveApplicationConfigList" parameterType="java.util.List">
         insert into application_config(config_id, application_id, config_type, config_value, create_time, update_time)
-        values (#{configId}, #{applicationId}, #{configType}, #{configValue}, now(), now());
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.configId}, #{item.applicationId}, #{item.configType}, #{item.configValue}, now(), now())
+        </foreach>
     </insert>
 
     <select id="queryApplicationById" resultMap="application_result_map">

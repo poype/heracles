@@ -39,8 +39,8 @@ public class ApplicationRepositoryImpl implements ApplicationRepository {
         try {
             applicationDAO.saveApplication(applicationDO);
             applicationDAO.saveJavaApplication(javaApplicationDO);
-            for (ApplicationConfigDO applicationConfigDO : applicationConfigDOList) {
-                applicationDAO.saveApplicationConfig(applicationConfigDO);
+            if (applicationConfigDOList.size() > 0) {
+                applicationDAO.saveApplicationConfigList(applicationConfigDOList);
             }
         } catch (DuplicateKeyException ex) {
             AssertUtil.isTrue(false, BusinessErrorCode.DUPLICATE_APP_NAME);
@@ -50,21 +50,23 @@ public class ApplicationRepositoryImpl implements ApplicationRepository {
     @Override
     public Application queryByAppName(String appName) {
         ApplicationDO applicationDO = applicationDAO.queryApplicationByName(appName);
-        JavaApplicationDO javaApplicationDO =
-                applicationDAO.queryJavaApplicationById(applicationDO.getApplicationId());
-        List<ApplicationConfigDO> configDOList =
-                applicationDAO.queryConfigListByAppId(applicationDO.getApplicationId());
+        AssertUtil.notNull(applicationDO, BusinessErrorCode.APP_NOT_FOUND);
 
-        return recoverJavaApplicationModel(applicationDO, javaApplicationDO, configDOList);
+        if (ApplicationType.getByCode(applicationDO.getApplicationType()) == ApplicationType.JAVA) {
+            return recoverJavaApplicationModel(applicationDO);
+        }
+        return null;
     }
 
     @Override
     public Application queryByAppId(String appId) {
         ApplicationDO applicationDO = applicationDAO.queryApplicationById(appId);
-        JavaApplicationDO javaApplicationDO = applicationDAO.queryJavaApplicationById(appId);
-        List<ApplicationConfigDO> configDOList = applicationDAO.queryConfigListByAppId(appId);
+        AssertUtil.notNull(applicationDO, BusinessErrorCode.APP_NOT_FOUND);
 
-        return recoverJavaApplicationModel(applicationDO, javaApplicationDO, configDOList);
+        if (ApplicationType.getByCode(applicationDO.getApplicationType()) == ApplicationType.JAVA) {
+            return recoverJavaApplicationModel(applicationDO);
+        }
+        return null;
     }
 
     @Override
@@ -100,8 +102,8 @@ public class ApplicationRepositoryImpl implements ApplicationRepository {
         applicationDAO.deleteConfigsByAppId(appId);
 
         List<ApplicationConfigDO> applicationConfigDOList = extractApplicationConfigDOList(appId, appConfigList);
-        for (ApplicationConfigDO applicationConfigDO : applicationConfigDOList) {
-            applicationDAO.saveApplicationConfig(applicationConfigDO);
+        if (applicationConfigDOList.size() > 0) {
+            applicationDAO.saveApplicationConfigList(applicationConfigDOList);
         }
     }
 
@@ -115,9 +117,17 @@ public class ApplicationRepositoryImpl implements ApplicationRepository {
         return applicationDAO.queryAllNames();
     }
 
-    private JavaApplication recoverJavaApplicationModel(ApplicationDO applicationDO,
-                                                        JavaApplicationDO javaApplicationDO,
-                                                        List<ApplicationConfigDO> configDOList) {
+
+    private JavaApplication recoverJavaApplicationModel(ApplicationDO applicationDO) {
+        JavaApplicationDO javaApplicationDO =
+                applicationDAO.queryJavaApplicationById(applicationDO.getApplicationId());
+        AssertUtil.notNull(javaApplicationDO, BusinessErrorCode.APP_NOT_FOUND,
+                "JAVA APP INFO NOT EXIST");
+
+        List<ApplicationConfigDO> configDOList =
+                applicationDAO.queryConfigListByAppId(applicationDO.getApplicationId());
+
+
         List<ApplicationConfig> configList = new ArrayList<>();
         for (ApplicationConfigDO configDO : configDOList) {
             ApplicationConfig config = new ApplicationConfig(configDO.getConfigId(),
@@ -125,15 +135,14 @@ public class ApplicationRepositoryImpl implements ApplicationRepository {
                     configDO.getConfigValue());
             configList.add(config);
         }
-        JavaApplication javaApplication = new JavaApplication(applicationDO.getDomainId(),
+        return new JavaApplication(applicationDO.getDomainId(),
                 applicationDO.getApplicationName(), ApplicationType.getByCode(applicationDO.getApplicationType()),
                 applicationDO.getDescription(), applicationDO.getCodeRepository(), applicationDO.getDevOwner(),
-                JSON.parseObject(applicationDO.getDevs(), Set.class), applicationDO.getQaOwner(),
-                JSON.parseObject(applicationDO.getQas(), Set.class), applicationDO.getBelongSystem(),
+                JSON.parseObject(applicationDO.getDevS(), Set.class), applicationDO.getQaOwner(),
+                JSON.parseObject(applicationDO.getQaS(), Set.class), applicationDO.getBelongSystem(),
                 applicationDO.getBelongBusiness(), configList, javaApplicationDO.getBaseCodeBranch(),
                 javaApplicationDO.getConfigFilePath(), javaApplicationDO.getJarPath(), javaApplicationDO.getPomPath(),
                 javaApplicationDO.getMvnCommand());
-        return javaApplication;
     }
 
     private ApplicationDO convertToApplicationDO(Application application) {
@@ -145,9 +154,9 @@ public class ApplicationRepositoryImpl implements ApplicationRepository {
         applicationDO.setDescription(application.getDescription());
         applicationDO.setCodeRepository(application.getCodeRepository());
         applicationDO.setDevOwner(application.getDevOwner());
-        applicationDO.setDevs(JSON.toJSONString(application.getDevSet()));
+        applicationDO.setDevS(JSON.toJSONString(application.getDevSet()));
         applicationDO.setQaOwner(application.getQaOwner());
-        applicationDO.setQas(JSON.toJSONString(application.getQaSet()));
+        applicationDO.setQaS(JSON.toJSONString(application.getQaSet()));
         applicationDO.setBelongSystem(application.getBelongSystem());
         applicationDO.setBelongBusiness(application.getBelongBusiness());
         return applicationDO;

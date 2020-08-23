@@ -46,8 +46,8 @@ public class ApplicationServiceImpl implements ApplicationService {
         List<ApplicationConfig> appConfigList = extractJavaConfigList(javaAppInfo);
 
         JavaApplication javaApplication = new JavaApplication(domainId, appName, ApplicationType.getByName(appType),
-                description, codeRepository, devOwner, new HashSet<String>(devList), qaOwner,
-                new HashSet<String>(qaList), belongSystem, belongBusiness, appConfigList,
+                description, codeRepository, devOwner, new HashSet<>(devList), qaOwner,
+                new HashSet<>(qaList), belongSystem, belongBusiness, appConfigList,
                 javaAppInfo.getBaseCodeBranch(), javaAppInfo.getConfigFilePath(), javaAppInfo.getJarPath(),
                 javaAppInfo.getPomPath(), javaAppInfo.getMvnCommand());
 
