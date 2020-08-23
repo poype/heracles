@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.poype.heracles.core.repository.dao.EnvironmentDAO">
+
+    <resultMap id="env_map" type="com.poype.heracles.core.repository.dao.model.EnvironmentDO">
+        <result column="env_id" property="envId"/>
+        <result column="env_name" property="envName"/>
+        <result column="env_type" property="envType"/>
+        <result column="default_cpu" property="defaultCpuOfApp"/>
+        <result column="default_memory" property="defaultMemoryOfApp"/>
+        <result column="total_cpu" property="totalCpu"/>
+        <result column="total_memory" property="totalMemory"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <select id="pickOneFreeSitEnv" resultMap="env_map">
+        select * from environment where status = 0 and env_type = 0 limit 1
+    </select>
+
+    <select id="queryByName" resultMap="env_map">
+        select * from environment where env_name = #{envName}
+    </select>
+
+    <update id="updateStatusInOptimisticLock">
+        update environment set status = #{targetStatus} where env_id = #{envId} and status = #{originalStatus}
+    </update>
+</mapper>

@@ -1,5 +1,7 @@
 package com.poype.heracles.core.domain.model.enums;
 
+import org.apache.commons.lang.StringUtils;
+
 public enum EnvironmentStatus {
 
     FREE(0, "FREE", "环境空闲"),
@@ -16,6 +18,27 @@ public enum EnvironmentStatus {
         this.code = code;
         this.name = name;
         this.description = description;
+    }
+
+    public static EnvironmentStatus getByName(String typeName) {
+        if (StringUtils.isBlank(typeName)) {
+            return null;
+        }
+        for (EnvironmentStatus status : values()) {
+            if (StringUtils.equalsIgnoreCase(status.getName(), typeName)) {
+                return status;
+            }
+        }
+        return null;
+    }
+
+    public static EnvironmentStatus getByCode(int code) {
+        for (EnvironmentStatus status : values()) {
+            if (status.code == code) {
+                return status;
+            }
+        }
+        return null;
     }
 
     public int getCode() {

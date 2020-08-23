@@ -29,11 +29,10 @@ public class SprintManagerImpl implements SprintManager {
     @Override
     public String createNewSprint(String name, String description, String releaseDate,
                                   List<AppOfSprintDto> sprintDtoList, String createUser) {
-        // 选择环境
-        String envName = "Test1";
         String sprintId = sprintService.createNewSprint(name, description, releaseDate,
-                sprintDtoList, createUser, envName);
+                sprintDtoList, createUser);
 
+        // 异步创建版本中各个应用对应的分支
         eventService.sendSprintCreated(sprintId);
         return sprintId;
     }

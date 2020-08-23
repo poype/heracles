@@ -2,17 +2,21 @@ package com.poype.heracles.core.domain.service.impl;
 
 import com.poype.heracles.common.enums.BusinessErrorCode;
 import com.poype.heracles.common.util.AssertUtil;
+import com.poype.heracles.core.domain.model.Environment;
 import com.poype.heracles.core.domain.model.application.Application;
 import com.poype.heracles.core.domain.model.dto.AppOfSprintDto;
 import com.poype.heracles.core.domain.model.enums.AppOfSprintStatus;
+import com.poype.heracles.core.domain.model.enums.EnvironmentStatus;
 import com.poype.heracles.core.domain.model.enums.SprintStatus;
 import com.poype.heracles.core.domain.model.sprint.AppOfSprint;
 import com.poype.heracles.core.domain.model.sprint.Sprint;
 import com.poype.heracles.core.domain.service.SprintService;
 import com.poype.heracles.core.repository.ApplicationRepository;
+import com.poype.heracles.core.repository.EnvironmentRepository;
 import com.poype.heracles.core.repository.SprintRepository;
 import com.poype.heracles.core.repository.integration.GitClient;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -30,14 +34,19 @@ public class SprintServiceImpl implements SprintService {
     @Resource
     private GitClient gitClient;
 
+    @Resource
+    private EnvironmentRepository environmentRepository;
+
     @Override
     public Sprint queryBySprintId(String sprintId) {
         return sprintRepository.queryBySprintId(sprintId);
     }
 
+    @Transactional
     @Override
     public String createNewSprint(String name, String description, String releaseDate,
-                                  List<AppOfSprintDto> sprintDtoList, String createUser, String sitEnvName) {
+                                  List<AppOfSprintDto> sprintDtoList, String createUser) {
+        Environment environment = environmentRepository.pickOneFreeSitEnv();
 
         List<AppOfSprint> appList = new ArrayList<>();
         for (AppOfSprintDto appOfSprintDto : sprintDtoList) {
@@ -48,9 +57,11 @@ public class SprintServiceImpl implements SprintService {
             appList.add(app);
         }
 
-        Sprint sprint = new Sprint(name, description, releaseDate, appList, sitEnvName);
-        sprintRepository.addNewSprint(sprint);
+        Sprint sprint = new Sprint(name, description, releaseDate, appList, environment.getEnvName());
+        environment.setStatus(EnvironmentStatus.BUSY);
 
+        sprintRepository.addNewSprint(sprint);
+        environmentRepository.updateEnvironmentStatus(environment, EnvironmentStatus.FREE);
         return sprint.getSprintId();
     }
 

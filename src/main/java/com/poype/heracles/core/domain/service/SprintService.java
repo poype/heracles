@@ -21,11 +21,10 @@ public interface SprintService {
      * @param releaseDate 发版日期
      * @param sprintDtoList 版本应用列表
      * @param createUser 创建者
-     * @param sitEnvName 分配的sit环境
      * @return 版本Id
      */
     String createNewSprint(String name, String description, String releaseDate,
-                           List<AppOfSprintDto> sprintDtoList, String createUser, String sitEnvName);
+                           List<AppOfSprintDto> sprintDtoList, String createUser);
 
     /**
      * 为一个版本中的所有应用创建分支

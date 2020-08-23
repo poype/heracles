@@ -59,8 +59,8 @@ public class SprintController {
                 AssertUtil.notEmpty(request.getAppList(), PARAM_ILLEGAL, "版本应用不能为空");
                 for (AppOfSprintDto app : request.getAppList()) {
                     AssertUtil.notBlank(app.getAppName(), PARAM_ILLEGAL, "应用名字不能为空");
-                    AssertUtil.notEmpty(app.getDevList(), PARAM_ILLEGAL, "必须制定至少一个研发人员");
-                    AssertUtil.notEmpty(app.getQaList(), PARAM_ILLEGAL, "必须制定至少一个测试人员");
+                    AssertUtil.notEmpty(app.getDevList(), PARAM_ILLEGAL, "必须指定至少一个研发人员");
+                    AssertUtil.notEmpty(app.getQaList(), PARAM_ILLEGAL, "必须指定至少一个测试人员");
                 }
             }
 

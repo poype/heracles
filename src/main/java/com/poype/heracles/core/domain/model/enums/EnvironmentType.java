@@ -3,13 +3,15 @@ package com.poype.heracles.core.domain.model.enums;
 import org.apache.commons.lang.StringUtils;
 
 public enum EnvironmentType {
-    SIT("SIT"),
+    SIT(0, "SIT"),
 
-    UAT("UAT"),
+    UAT(1, "UAT"),
 
-    RC("RC"),
+    RC(2, "RC"),
 
-    PROD("PROD");
+    PROD(3, "PROD");
+
+    private int code;
 
     private String name;
 
@@ -25,7 +27,17 @@ public enum EnvironmentType {
         return null;
     }
 
-    EnvironmentType(String name) {
+    public static EnvironmentType getByCode(int code) {
+        for (EnvironmentType environmentType : values()) {
+            if (environmentType.code == code) {
+                return environmentType;
+            }
+        }
+        return null;
+    }
+
+    EnvironmentType(int code, String name) {
+        this.code = code;
         this.name = name;
     }
 
@@ -35,5 +47,13 @@ public enum EnvironmentType {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
     }
 }

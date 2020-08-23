@@ -1,12 +1,9 @@
-package com.poype.heracles.core.domain.model;
+package com.poype.heracles.core.repository.dao.model;
 
-import com.poype.heracles.core.domain.model.enums.EnvironmentStatus;
-import com.poype.heracles.core.domain.model.enums.EnvironmentType;
+import java.util.Date;
 
-/**
- * 环境对象
- */
-public class Environment {
+public class EnvironmentDO {
+
     /**
      * 环境Id
      */
@@ -20,7 +17,7 @@ public class Environment {
     /**
      * 环境类型
      */
-    private EnvironmentType envType;
+    private int envType;
 
     /**
      * 该环境下应用的默认CPU资源
@@ -45,19 +42,11 @@ public class Environment {
     /**
      * 环境状态
      */
-    private EnvironmentStatus status;
+    private int status;
 
-    public Environment(int envId, String envName, EnvironmentType envType, int defaultCpuOfApp,
-                       int defaultMemoryOfApp, int totalCpu, int totalMemory, EnvironmentStatus status) {
-        this.envId = envId;
-        this.envName = envName;
-        this.envType = envType;
-        this.defaultCpuOfApp = defaultCpuOfApp;
-        this.defaultMemoryOfApp = defaultMemoryOfApp;
-        this.totalCpu = totalCpu;
-        this.totalMemory = totalMemory;
-        this.status = status;
-    }
+    private Date createTime;
+
+    private Date updateTime;
 
     public int getEnvId() {
         return envId;
@@ -73,6 +62,14 @@ public class Environment {
 
     public void setEnvName(String envName) {
         this.envName = envName;
+    }
+
+    public int getEnvType() {
+        return envType;
+    }
+
+    public void setEnvType(int envType) {
+        this.envType = envType;
     }
 
     public int getDefaultCpuOfApp() {
@@ -107,19 +104,27 @@ public class Environment {
         this.totalMemory = totalMemory;
     }
 
-    public EnvironmentStatus getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(EnvironmentStatus status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 
-    public EnvironmentType getEnvType() {
-        return envType;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setEnvType(EnvironmentType envType) {
-        this.envType = envType;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }

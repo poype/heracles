@@ -36,6 +36,12 @@ public enum BusinessErrorCode {
     ILLEGAL_SPRINT_STATUS("011", INFO, "illegal sprint status"),
 
     ILLEGAL_ENVIRONMENT("012", INFO, "illegal environment"),
+
+    NO_FREE_SIT_ENV("013", INFO, "can't find any free sit environment"),
+
+    ENV_NOT_EXIST("014", INFO, "env not exist"),
+
+    PICK_ENV_CONFLICT("015", INFO, "pick environment conflict"),
     ;
 
     private final String specificCode;
