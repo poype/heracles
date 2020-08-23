@@ -1,7 +1,11 @@
 package com.poype.heracles.core.domain.service.impl;
 
+import com.poype.heracles.common.enums.BusinessErrorCode;
+import com.poype.heracles.common.util.AssertUtil;
 import com.poype.heracles.core.domain.model.application.Application;
 import com.poype.heracles.core.domain.model.dto.AppOfSprintDto;
+import com.poype.heracles.core.domain.model.enums.AppOfSprintStatus;
+import com.poype.heracles.core.domain.model.enums.SprintStatus;
 import com.poype.heracles.core.domain.model.sprint.AppOfSprint;
 import com.poype.heracles.core.domain.model.sprint.Sprint;
 import com.poype.heracles.core.domain.service.SprintService;
@@ -123,5 +127,31 @@ public class SprintServiceImpl implements SprintService {
                 }
             }
         }
+    }
+
+    @Override
+    public String transferAppOfSprintStatus(String sprintId, String app, String status) {
+        Sprint sprint = sprintRepository.queryBySprintId(sprintId);
+        AppOfSprint appOfSprint = sprint.findAppByName(app);
+        AssertUtil.notNull(appOfSprint, BusinessErrorCode.APP_NOT_FOUND);
+
+        appOfSprint.setStatus(AppOfSprintStatus.getByName(status));
+        sprintRepository.updateAppOfSprintStatus(appOfSprint);
+
+        // 检查整个sprint的status是否需要扭转
+        if (sprint.checkSprintStatusAfterAppStatusTransfer(AppOfSprintStatus.getByName(status))) {
+            sprintRepository.updateSprintStatus(sprint.getSprintId(), sprint.getStatus());
+        }
+        return sprint.getStatus().getName();
+    }
+
+    @Override
+    public void transferWholeSprintStatus(String sprintId, String status) {
+        Sprint sprint = sprintRepository.queryBySprintId(sprintId);
+        AssertUtil.isTrue(sprint.getStatus().getCode() > SprintStatus.FINISH_TEST.getCode(),
+                BusinessErrorCode.ILLEGAL_SPRINT_STATUS);
+
+        sprint.setStatus(SprintStatus.getByName(status));
+        sprintRepository.updateSprintStatus(sprint.getSprintId(), sprint.getStatus());
     }
 }

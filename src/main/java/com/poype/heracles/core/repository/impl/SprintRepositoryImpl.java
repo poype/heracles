@@ -1,7 +1,6 @@
 package com.poype.heracles.core.repository.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.poype.heracles.core.domain.model.ReleaseOrder;
 import com.poype.heracles.core.domain.model.dto.SimpleSprintDto;
 import com.poype.heracles.core.domain.model.enums.AppOfSprintStatus;
 import com.poype.heracles.core.domain.model.enums.ApplicationType;
@@ -114,5 +113,10 @@ public class SprintRepositoryImpl implements SprintRepository {
                 appOfSprint.getCodeBranch(), JSON.toJSONString(appOfSprint.getDevList()),
                 JSON.toJSONString(appOfSprint.getQaList()), appOfSprint.getStatus().getCode());
         sprintDAO.saveAppOfSprint(appOfSprintDO);
+    }
+
+    @Override
+    public void updateAppOfSprintStatus(AppOfSprint appOfSprint) {
+        sprintDAO.updateAppOfSprintStatus(appOfSprint.getRelationId(), appOfSprint.getStatus().getCode());
     }
 }

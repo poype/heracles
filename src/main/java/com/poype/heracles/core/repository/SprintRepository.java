@@ -29,4 +29,6 @@ public interface SprintRepository {
     void updateDevAndQaOfApp(String appName, List<String> devList, List<String> qaList);
 
     void addNewAppForSprint(String sprintId, AppOfSprint appOfSprint);
+
+    void updateAppOfSprintStatus(AppOfSprint appOfSprint);
 }

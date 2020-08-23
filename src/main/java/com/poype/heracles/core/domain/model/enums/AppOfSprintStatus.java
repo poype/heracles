@@ -24,6 +24,15 @@ public enum AppOfSprintStatus {
         return null;
     }
 
+    public static AppOfSprintStatus getByName(String name) {
+        for (AppOfSprintStatus status : values()) {
+            if (status.getName().equals(name)) {
+                return status;
+            }
+        }
+        return null;
+    }
+
     AppOfSprintStatus(int code, String name) {
         this.code = code;
         this.name = name;

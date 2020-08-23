@@ -70,4 +70,8 @@
     <update id="updateDevAndQaOfApp">
         update app_of_sprint set dev_s = #{devS}, qa_s = #{qaS} where app = #{appName}
     </update>
+
+    <update id = "updateAppOfSprintStatus">
+        update app_of_sprint set status = #{targetStatus} where relation_id = #{relationId}
+    </update>
 </mapper>

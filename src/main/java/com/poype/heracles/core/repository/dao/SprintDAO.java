@@ -32,4 +32,6 @@ public interface SprintDAO {
 
     void updateDevAndQaOfApp(@Param("appName") String appName, @Param("devS") String devS,
                              @Param("qaS") String qaS);
+
+    void updateAppOfSprintStatus(@Param("relationId") String relationId, @Param("targetStatus") int targetStatus);
 }

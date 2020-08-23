@@ -37,7 +37,7 @@ public class ReleaseServiceImpl implements ReleaseService {
 
     @Override
     public String createReleaseOrderForSprint(Sprint sprint, String app, String operator) {
-        AppOfSprint appOfSprint = findAppFromSprint(sprint, app);
+        AppOfSprint appOfSprint = sprint.findAppByName(app);
         AssertUtil.notNull(appOfSprint, BusinessErrorCode.PARAM_ILLEGAL);
 
         // 根据sprint状态和其中app的状态选择发布的环境
@@ -123,14 +123,5 @@ public class ReleaseServiceImpl implements ReleaseService {
             }
         }
         return releaseOrder;
-    }
-
-    private AppOfSprint findAppFromSprint(Sprint sprint, String app) {
-        for (AppOfSprint appOfSprint : sprint.getApplications()) {
-            if (appOfSprint.getApp().equals(app)) {
-                return appOfSprint;
-            }
-        }
-        return null;
     }
 }

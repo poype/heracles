@@ -1,6 +1,7 @@
 package com.poype.heracles.core.domain.model.sprint;
 
 import com.poype.heracles.common.util.IdUtil;
+import com.poype.heracles.core.domain.model.enums.AppOfSprintStatus;
 import com.poype.heracles.core.domain.model.enums.SprintStatus;
 
 import java.util.List;
@@ -65,6 +66,40 @@ public class Sprint {
         this.status = status;
         this.applications = applications;
         this.sitEnvName = sitEnvName;
+    }
+
+    public AppOfSprint findAppByName(String appName) {
+        for (AppOfSprint appOfSprint : applications) {
+            if (appOfSprint.getApp().equals(appName)) {
+                return appOfSprint;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 单个应用的status转变后，检查整个sprint的status是否需要扭转
+     * @param targetStatus 应用扭转到的status
+     * @return sprint的status需要扭转返回true，否则返回false
+     */
+    public boolean checkSprintStatusAfterAppStatusTransfer(AppOfSprintStatus targetStatus) {
+        for (AppOfSprint appOfSprint : applications) {
+            // 存在一个应用的状态晚于变更应用的状态，则整个sprint的状态保持不变
+            if (appOfSprint.getStatus().getCode() < targetStatus.getCode()) {
+                return false;
+            }
+        }
+        if (targetStatus == AppOfSprintStatus.SIT) {
+            this.status = SprintStatus.SIT;
+        }
+        if (targetStatus == AppOfSprintStatus.UAT) {
+            this.status = SprintStatus.UAT;
+        }
+        if (targetStatus == AppOfSprintStatus.FINISH) {
+            this.status = SprintStatus.FINISH_TEST;
+        }
+        return true;
+
     }
 
     public String getSprintId() {

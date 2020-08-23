@@ -8,10 +8,14 @@ import com.poype.heracles.common.util.AssertUtil;
 import com.poype.heracles.common.util.ThreadLocalHolder;
 import com.poype.heracles.core.domain.model.dto.AppOfSprintDto;
 import com.poype.heracles.core.domain.model.dto.SimpleSprintDto;
+import com.poype.heracles.core.domain.model.enums.AppOfSprintStatus;
+import com.poype.heracles.core.domain.model.enums.SprintStatus;
 import com.poype.heracles.core.domain.model.sprint.AppOfSprint;
 import com.poype.heracles.core.domain.model.sprint.Sprint;
 import com.poype.heracles.core.domain.service.SprintService;
 import com.poype.heracles.core.facade.request.CreateNewSprintRequest;
+import com.poype.heracles.core.facade.request.TransferAppStatusRequest;
+import com.poype.heracles.core.facade.request.TransferSprintStatusRequest;
 import com.poype.heracles.core.facade.request.UpdateSprintRequest;
 import com.poype.heracles.core.facade.result.*;
 import com.poype.heracles.core.manager.SprintManager;
@@ -71,6 +75,9 @@ public class SprintController {
         return result;
     }
 
+    /**
+     * 变更应用信息
+     */
     @RequestMapping(value = "/update", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
     public BaseResult update(@RequestBody final UpdateSprintRequest request) {
@@ -190,6 +197,68 @@ public class SprintController {
                 sprintService.createCodeBranch(sprintId);
             }
         });
+        return result;
+    }
+
+    @RequestMapping(value = "/transferAppStatus", method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public TransferAppStatusResult transferAppStatus(@RequestBody final TransferAppStatusRequest request) {
+        ThreadLocalHolder.setBizScene(BizScene.TRANSFER_APP_OF_SPRINT_STATUS);
+
+        final TransferAppStatusResult result = new TransferAppStatusResult();
+
+        executeTemplate.execute(result, new ExecuteCallback() {
+
+            @Override
+            public void check() {
+                AssertUtil.notBlank(request.getSprintId(), PARAM_ILLEGAL, "sprintId can't be blank");
+                AssertUtil.notBlank(request.getApp(), PARAM_ILLEGAL, "app name can't be blank");
+                AssertUtil.notBlank(request.getStatus(), PARAM_ILLEGAL, "status can't be blank");
+
+                AppOfSprintStatus targetStatus = AppOfSprintStatus.getByName(request.getStatus());
+                AssertUtil.isTrue(targetStatus == AppOfSprintStatus.SIT
+                        || targetStatus == AppOfSprintStatus.UAT
+                        || targetStatus == AppOfSprintStatus.FINISH,
+                        PARAM_ILLEGAL, "status只能是SIT、UAT、FINISH");
+            }
+
+            @Override
+            public void doService() {
+                String sprintStatus = sprintService.transferAppOfSprintStatus(request.getSprintId(),
+                        request.getApp(), request.getStatus());
+                result.setSprintStatus(sprintStatus);
+            }
+        });
+
+        return result;
+    }
+
+    @RequestMapping(value = "/transferSprintStatus", method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public BaseResult transferSprintStatus(@RequestBody final TransferSprintStatusRequest request) {
+        ThreadLocalHolder.setBizScene(BizScene.TRANSFER_WHOLE_SPRINT_STATUS);
+
+        final BaseResult result = new BaseResult();
+
+        executeTemplate.execute(result, new ExecuteCallback() {
+
+            @Override
+            public void check() {
+                AssertUtil.notBlank(request.getSprintId(), PARAM_ILLEGAL, "sprintId can't be blank");
+                AssertUtil.notBlank(request.getStatus(), PARAM_ILLEGAL, "status can't be blank");
+
+                SprintStatus targetStatus = SprintStatus.getByName(request.getStatus());
+                AssertUtil.isTrue(targetStatus == SprintStatus.FINISH_RC_TEST
+                                || targetStatus == SprintStatus.FINISH_PROD_VERIFY,
+                                PARAM_ILLEGAL, "status只能是FINISH_RC_TEST、FINISH_PROD_VERIFY");
+            }
+
+            @Override
+            public void doService() {
+                sprintService.transferWholeSprintStatus(request.getSprintId(), request.getStatus());
+            }
+        });
+
         return result;
     }
 }

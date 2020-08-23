@@ -17,7 +17,7 @@ public enum SprintStatus {
 
     PROD(7, "RELEASE"),
 
-    FINISH_PROD_VERIFY(8, "FINISH_RC_TEST");
+    FINISH_PROD_VERIFY(8, "FINISH_PROD_VERIFY");
 
     private int code;
 
@@ -26,6 +26,15 @@ public enum SprintStatus {
     public static SprintStatus getByCode(int code) {
         for (SprintStatus status : values()) {
             if (status.getCode() == code) {
+                return status;
+            }
+        }
+        return null;
+    }
+
+    public static SprintStatus getByName(String name) {
+        for (SprintStatus status : values()) {
+            if (status.getName().equals(name)) {
                 return status;
             }
         }

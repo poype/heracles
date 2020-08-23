@@ -34,6 +34,10 @@ public enum BizScene {
     QUERY_ALL_HOST("0015", "query all host"),
 
     QUERY_SIMPLE_RELEASE_OF_SPRINT("0016", "query all host"),
+
+    TRANSFER_APP_OF_SPRINT_STATUS("0017", "transfer app of sprint status"),
+
+    TRANSFER_WHOLE_SPRINT_STATUS("0018", "transfer whole sprint status"),
     ;
 
     /** 场景编码 */

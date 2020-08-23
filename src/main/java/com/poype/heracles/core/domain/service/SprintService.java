@@ -39,4 +39,19 @@ public interface SprintService {
      * @param appOfSprintDtoList 新的应用列表
      */
     void updateAppListOfSprint(Sprint sprint, List<AppOfSprintDto> appOfSprintDtoList);
+
+    /**
+     * 扭转版本中一个应用的状态
+     * @param sprintId 版本Id
+     * @param app 应用名称
+     * @param status 目标状态
+     */
+    String transferAppOfSprintStatus(String sprintId, String app, String status);
+
+    /**
+     * 扭转整个版本的状态
+     * @param sprintId 版本Id
+     * @param status 目标状态
+     */
+    void transferWholeSprintStatus(String sprintId, String status);
 }
