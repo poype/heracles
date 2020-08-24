@@ -31,4 +31,16 @@
         insert into environment(env_name, env_type, default_cpu, default_memory, status, create_time, update_time)
         value (#{envName}, #{envType}, #{defaultCpuOfApp}, #{defaultMemoryOfApp}, #{status}, now(), now())
     </insert>
+
+    <select id="queryAll" resultMap="env_map">
+        select * from environment
+    </select>
+
+    <select id="queryById" resultMap="env_map">
+        select * from environment where env_id = #{envId}
+    </select>
+
+    <update id="updateEnvironment">
+        update environment set default_cpu = #{defaultCpuOfApp}, default_memory = #{defaultMemoryOfApp} where env_id = #{envId}
+    </update>
 </mapper>

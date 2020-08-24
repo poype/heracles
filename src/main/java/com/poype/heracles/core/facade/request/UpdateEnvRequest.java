@@ -1,16 +1,8 @@
 package com.poype.heracles.core.facade.request;
 
-public class AddNewSitEnvRequest {
+public class UpdateEnvRequest {
 
-    /**
-     * 环境名称
-     */
-    private String envName;
-
-    /**
-     * 环境类型
-     */
-    private String envType;
+    private int envId;
 
     /**
      * 该环境下应用的默认CPU资源
@@ -24,28 +16,19 @@ public class AddNewSitEnvRequest {
 
     @Override
     public String toString() {
-        return "AddNewSitEnvRequest{" +
-                "envName='" + envName + '\'' +
-                ", envType='" + envType + '\'' +
+        return "UpdateEnvRequest{" +
+                "envId=" + envId +
                 ", defaultCpuOfApp=" + defaultCpuOfApp +
                 ", defaultMemoryOfApp=" + defaultMemoryOfApp +
                 '}';
     }
 
-    public String getEnvName() {
-        return envName;
+    public int getEnvId() {
+        return envId;
     }
 
-    public void setEnvName(String envName) {
-        this.envName = envName;
-    }
-
-    public String getEnvType() {
-        return envType;
-    }
-
-    public void setEnvType(String envType) {
-        this.envType = envType;
+    public void setEnvId(int envId) {
+        this.envId = envId;
     }
 
     public int getDefaultCpuOfApp() {

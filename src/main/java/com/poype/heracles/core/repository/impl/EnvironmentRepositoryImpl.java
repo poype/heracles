@@ -11,6 +11,8 @@ import com.poype.heracles.core.repository.dao.model.EnvironmentDO;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository("environmentRepository")
 public class EnvironmentRepositoryImpl implements EnvironmentRepository {
@@ -21,6 +23,17 @@ public class EnvironmentRepositoryImpl implements EnvironmentRepository {
     @Override
     public Environment queryByEnvName(String name) {
         EnvironmentDO envDO = environmentDAO.queryByName(name);
+        AssertUtil.notNull(envDO, BusinessErrorCode.ENV_NOT_EXIST);
+
+        return new Environment(envDO.getEnvId(), envDO.getEnvName(),
+                EnvironmentType.getByCode(envDO.getEnvType()), envDO.getDefaultCpuOfApp(),
+                envDO.getDefaultMemoryOfApp(), envDO.getTotalCpu(), envDO.getTotalMemory(),
+                EnvironmentStatus.getByCode(envDO.getStatus()));
+    }
+
+    @Override
+    public Environment queryById(int envId) {
+        EnvironmentDO envDO = environmentDAO.queryById(envId);
         AssertUtil.notNull(envDO, BusinessErrorCode.ENV_NOT_EXIST);
 
         return new Environment(envDO.getEnvId(), envDO.getEnvName(),
@@ -55,5 +68,24 @@ public class EnvironmentRepositoryImpl implements EnvironmentRepository {
                 environment.getDefaultMemoryOfApp(), environment.getStatus().getCode());
 
         environmentDAO.save(environmentDO);
+    }
+
+    @Override
+    public List<Environment> queryAll() {
+        List<EnvironmentDO> envDOList = environmentDAO.queryAll();
+        List<Environment> envList = new ArrayList<>();
+        for (EnvironmentDO envDO : envDOList) {
+            Environment env = new Environment(envDO.getEnvId(), envDO.getEnvName(),
+                    EnvironmentType.getByCode(envDO.getEnvType()), envDO.getDefaultCpuOfApp(),
+                    envDO.getDefaultMemoryOfApp(), envDO.getTotalCpu(), envDO.getTotalMemory(),
+                    EnvironmentStatus.getByCode(envDO.getStatus()));
+            envList.add(env);
+        }
+        return envList;
+    }
+
+    @Override
+    public void updateEnvironment(Environment env) {
+        environmentDAO.updateEnvironment(env.getEnvId(), env.getDefaultCpuOfApp(), env.getDefaultMemoryOfApp());
     }
 }

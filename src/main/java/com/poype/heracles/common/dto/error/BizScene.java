@@ -38,6 +38,10 @@ public enum BizScene {
     TRANSFER_APP_OF_SPRINT_STATUS("0017", "transfer app of sprint status"),
 
     TRANSFER_WHOLE_SPRINT_STATUS("0018", "transfer whole sprint status"),
+
+    QUERY_ALL_ENV("0019", "query all environment"),
+
+    UPDATE_ENV("0020", "update env"),
     ;
 
     /** 场景编码 */

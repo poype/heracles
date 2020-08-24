@@ -3,6 +3,8 @@ package com.poype.heracles.core.repository;
 import com.poype.heracles.core.domain.model.Environment;
 import com.poype.heracles.core.domain.model.enums.EnvironmentStatus;
 
+import java.util.List;
+
 public interface EnvironmentRepository {
 
     /**
@@ -11,6 +13,8 @@ public interface EnvironmentRepository {
      * @return 环境model
      */
     Environment queryByEnvName(String name);
+
+    Environment queryById(int envId);
 
     /**
      * 挑选一个可用的SIT环境
@@ -27,4 +31,8 @@ public interface EnvironmentRepository {
      * 保存一个新的environment对象
      */
     void saveEnvironment(Environment environment);
+
+    List<Environment> queryAll();
+
+    void updateEnvironment(Environment env);
 }

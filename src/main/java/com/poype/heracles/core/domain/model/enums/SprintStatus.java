@@ -15,7 +15,7 @@ public enum SprintStatus {
 
     FINISH_RC_TEST(6, "FINISH_RC_TEST"),
 
-    PROD(7, "RELEASE"),
+    PROD(7, "PROD"),
 
     FINISH_PROD_VERIFY(8, "FINISH_PROD_VERIFY");
 
