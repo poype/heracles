@@ -47,6 +47,14 @@ public class Environment {
      */
     private EnvironmentStatus status;
 
+    public Environment(String envName, EnvironmentType envType, int defaultCpuOfApp, int defaultMemoryOfApp) {
+        this.envName = envName;
+        this.envType = envType;
+        this.defaultCpuOfApp = defaultCpuOfApp;
+        this.defaultMemoryOfApp = defaultMemoryOfApp;
+        this.status = EnvironmentStatus.FREE;
+    }
+
     public Environment(int envId, String envName, EnvironmentType envType, int defaultCpuOfApp,
                        int defaultMemoryOfApp, int totalCpu, int totalMemory, EnvironmentStatus status) {
         this.envId = envId;

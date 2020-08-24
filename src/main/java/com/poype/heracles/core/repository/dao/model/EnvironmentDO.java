@@ -48,6 +48,17 @@ public class EnvironmentDO {
 
     private Date updateTime;
 
+    public EnvironmentDO(String envName, int envType, int defaultCpuOfApp, int defaultMemoryOfApp, int status) {
+        this.envName = envName;
+        this.envType = envType;
+        this.defaultCpuOfApp = defaultCpuOfApp;
+        this.defaultMemoryOfApp = defaultMemoryOfApp;
+        this.status = status;
+    }
+
+    public EnvironmentDO() {
+    }
+
     public int getEnvId() {
         return envId;
     }

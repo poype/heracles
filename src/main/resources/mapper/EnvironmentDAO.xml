@@ -26,4 +26,9 @@
     <update id="updateStatusInOptimisticLock">
         update environment set status = #{targetStatus} where env_id = #{envId} and status = #{originalStatus}
     </update>
+
+    <insert id="save" parameterType="com.poype.heracles.core.repository.dao.model.EnvironmentDO">
+        insert into environment(env_name, env_type, default_cpu, default_memory, status, create_time, update_time)
+        value (#{envName}, #{envType}, #{defaultCpuOfApp}, #{defaultMemoryOfApp}, #{status}, now(), now())
+    </insert>
 </mapper>

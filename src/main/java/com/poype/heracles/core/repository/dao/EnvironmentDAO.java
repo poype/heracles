@@ -15,4 +15,6 @@ public interface EnvironmentDAO {
 
     int updateStatusInOptimisticLock(@Param("envId") int envId, @Param("targetStatus") int targetStatus,
                                      @Param("originalStatus") int originalStatus);
+
+    void save(EnvironmentDO environmentDO);
 }

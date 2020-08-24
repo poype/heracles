@@ -47,4 +47,13 @@ public class EnvironmentRepositoryImpl implements EnvironmentRepository {
 
         AssertUtil.isTrue(count == 1, BusinessErrorCode.PICK_ENV_CONFLICT);
     }
+
+    @Override
+    public void saveEnvironment(Environment environment) {
+        EnvironmentDO environmentDO = new EnvironmentDO(environment.getEnvName(),
+                environment.getEnvType().getCode(), environment.getDefaultCpuOfApp(),
+                environment.getDefaultMemoryOfApp(), environment.getStatus().getCode());
+
+        environmentDAO.save(environmentDO);
+    }
 }

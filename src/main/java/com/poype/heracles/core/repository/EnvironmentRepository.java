@@ -22,4 +22,9 @@ public interface EnvironmentRepository {
      * 更新一个环境的使用状态
      */
     void updateEnvironmentStatus(Environment environment, EnvironmentStatus originalStatus);
+
+    /**
+     * 保存一个新的environment对象
+     */
+    void saveEnvironment(Environment environment);
 }
