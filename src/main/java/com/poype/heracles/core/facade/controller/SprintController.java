@@ -100,7 +100,6 @@ public class SprintController {
 
             @Override
             public void doService() {
-                String createUser = "poype";
                 sprintManager.update(request.getSprintId(), request.getAppList());
             }
         });

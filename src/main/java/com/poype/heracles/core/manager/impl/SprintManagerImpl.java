@@ -41,6 +41,9 @@ public class SprintManagerImpl implements SprintManager {
     public void update(String sprintId, List<AppOfSprintDto> appOfSprintDtoList) {
         Sprint sprint = sprintService.queryBySprintId(sprintId);
         sprintService.updateAppListOfSprint(sprint, appOfSprintDtoList);
+
+        // 异步创建版本中各个应用对应的分支
+        eventService.sendSprintCreated(sprintId);
     }
 
     @Override

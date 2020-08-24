@@ -42,6 +42,8 @@ public enum BusinessErrorCode {
     ENV_NOT_EXIST("014", INFO, "env not exist"),
 
     PICK_ENV_CONFLICT("015", INFO, "pick environment conflict"),
+
+    APP_OF_SPRINT_CONFLICT("016", INFO, "app of sprint conflict"),
     ;
 
     private final String specificCode;

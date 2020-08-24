@@ -70,7 +70,9 @@ public class SprintServiceImpl implements SprintService {
         Sprint sprint = sprintRepository.queryBySprintId(sprintId);
 
         for (AppOfSprint appOfSprint : sprint.getApplications()) {
-            gitClient.createNewBranch(appOfSprint.getApp(), appOfSprint.getCodeBranch());
+            if (appOfSprint.getStatus() == AppOfSprintStatus.INIT) {
+                gitClient.createNewBranch(appOfSprint.getApp(), appOfSprint.getCodeBranch());
+            }
         }
         sprintRepository.updateWholeSprintToStartStatus(sprint.getSprintId());
     }

@@ -1,6 +1,8 @@
 package com.poype.heracles.core.repository.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.poype.heracles.common.enums.BusinessErrorCode;
+import com.poype.heracles.common.util.AssertUtil;
 import com.poype.heracles.core.domain.model.dto.SimpleSprintDto;
 import com.poype.heracles.core.domain.model.enums.AppOfSprintStatus;
 import com.poype.heracles.core.domain.model.enums.ApplicationType;
@@ -11,6 +13,7 @@ import com.poype.heracles.core.repository.SprintRepository;
 import com.poype.heracles.core.repository.dao.SprintDAO;
 import com.poype.heracles.core.repository.dao.model.AppOfSprintDO;
 import com.poype.heracles.core.repository.dao.model.SprintDO;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,14 +33,18 @@ public class SprintRepositoryImpl implements SprintRepository {
         SprintDO sprintDO = new SprintDO(sprint.getSprintId(), sprint.getSprintName(), sprint.getDescription(),
                 sprint.getReleaseDate(), sprint.getStatus().getCode(), sprint.getSitEnvName());
 
-        sprintDAO.saveSprint(sprintDO);
+        try {
+            sprintDAO.saveSprint(sprintDO);
 
-        for (AppOfSprint appOfSprint : sprint.getApplications()) {
-            AppOfSprintDO appOfSprintDO = new AppOfSprintDO(appOfSprint.getRelationId(), sprint.getSprintId(),
-                    appOfSprint.getApp(), appOfSprint.getAppType().getCode(), appOfSprint.getCodeRepository(),
-                    appOfSprint.getCodeBranch(), JSON.toJSONString(appOfSprint.getDevList()),
-                    JSON.toJSONString(appOfSprint.getQaList()), appOfSprint.getStatus().getCode());
-            sprintDAO.saveAppOfSprint(appOfSprintDO);
+            for (AppOfSprint appOfSprint : sprint.getApplications()) {
+                AppOfSprintDO appOfSprintDO = new AppOfSprintDO(appOfSprint.getRelationId(), sprint.getSprintId(),
+                        appOfSprint.getApp(), appOfSprint.getAppType().getCode(), appOfSprint.getCodeRepository(),
+                        appOfSprint.getCodeBranch(), JSON.toJSONString(appOfSprint.getDevList()),
+                        JSON.toJSONString(appOfSprint.getQaList()), appOfSprint.getStatus().getCode());
+                sprintDAO.saveAppOfSprint(appOfSprintDO);
+            }
+        } catch (DuplicateKeyException ex) {
+            AssertUtil.isTrue(false, BusinessErrorCode.APP_OF_SPRINT_CONFLICT);
         }
     }
 
