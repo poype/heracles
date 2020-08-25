@@ -42,6 +42,8 @@ public enum BizScene {
     QUERY_ALL_ENV("0019", "query all environment"),
 
     UPDATE_ENV("0020", "update env"),
+
+    DATA_SOURCE("0021", "data source"),
     ;
 
     /** 场景编码 */

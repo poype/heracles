@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.poype.heracles.core.repository.dao.DataSourceDAO">
+
+    <resultMap id="ds_map" type="com.poype.heracles.core.repository.dao.model.DataSourceDO">
+        <result column="ds_id" property="dsId"/>
+        <result column="ds_name" property="dataSourceName"/>
+        <result column="description" property="description"/>
+        <result column="ds_type" property="dataSourceType"/>
+        <result column="ip" property="ip"/>
+        <result column="port" property="port"/>
+        <result column="user_name" property="userName"/>
+        <result column="password" property="password"/>
+        <result column="schema" property="schema"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <insert id="save" parameterType="com.poype.heracles.core.repository.dao.model.DataSourceDO">
+        insert into data_source(ds_id, ds_name, description, ds_type, ip, port, user_name, password, `schema`, create_time, update_time)
+        values(#{dsId}, #{dataSourceName}, #{description}, #{dataSourceType}, #{ip}, #{port}, #{userName}, #{password}, #{schema}, now(), now());
+    </insert>
+
+    <select id="queryByName" resultMap="ds_map">
+        select * from data_source where ds_name = #{dataSourceName}
+    </select>
+
+    <select id="queryAll">
+        select * from data_source
+    </select>
+</mapper>

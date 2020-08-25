@@ -15,6 +15,9 @@
                 <value>applicationController</value>
                 <value>configFileController</value>
                 <value>sprintController</value>
+                <value>releaseController</value>
+                <value>environmentController</value>
+                <value>dataSourceController</value>
             </list>
         </property>
     </bean>
