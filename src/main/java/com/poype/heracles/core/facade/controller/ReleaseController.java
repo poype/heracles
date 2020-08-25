@@ -7,10 +7,7 @@ import com.poype.heracles.common.util.AssertUtil;
 import com.poype.heracles.common.util.ThreadLocalHolder;
 import com.poype.heracles.core.domain.model.dto.SimpleReleaseOrderDto;
 import com.poype.heracles.core.facade.request.CreateReleaseOrderForSprintRequest;
-import com.poype.heracles.core.facade.result.CreateReleaseOrderResult;
-import com.poype.heracles.core.facade.result.QueryReleaseOrderStatusResult;
-import com.poype.heracles.core.facade.result.QuerySimpleReleaseOrderOfSprintResult;
-import com.poype.heracles.core.facade.result.ReleaseOrderView;
+import com.poype.heracles.core.facade.result.*;
 import com.poype.heracles.core.manager.ReleaseManager;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
@@ -19,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 
 import java.util.List;
+import java.util.Map;
 
 import static com.poype.heracles.common.enums.BusinessErrorCode.PARAM_ILLEGAL;
 
@@ -113,6 +111,33 @@ public class ReleaseController {
                         releaseManager.queryReleaseOrderListBySprintId(sprintId);
 
                 result.setReleaseList(simpleReleaseOrderDtoList);
+            }
+        });
+
+        return result;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/queryPageOfReleaseOrder", method = RequestMethod.GET, produces = "application/json")
+    public QueryPageOfReleaseOrderResult queryPageOfReleaseOrder(
+            @RequestParam("pageNum") final int pageNum) {
+
+        ThreadLocalHolder.setBizScene(BizScene.QUERY_SIMPLE_RELEASE_OF_SPRINT);
+
+        final QueryPageOfReleaseOrderResult result = new QueryPageOfReleaseOrderResult();
+
+        executeTemplate.execute(result, new ExecuteCallback() {
+
+            @Override
+            public void check() {
+                AssertUtil.isTrue(pageNum > 0, PARAM_ILLEGAL);
+            }
+
+            @Override
+            public void doService() {
+                Map<String, Object> map = releaseManager.queryPageOfReleaseOrder(pageNum);
+                result.setReleaseOrderList((List<SimpleReleaseOrderDto>) map.get("releaseOrderList"));
+                result.setTotal((int) map.get("total"));
             }
         });
 

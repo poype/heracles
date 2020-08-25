@@ -4,6 +4,7 @@ import com.poype.heracles.core.domain.model.dto.SimpleReleaseOrderDto;
 import com.poype.heracles.core.facade.result.ReleaseOrderView;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ReleaseManager {
 
@@ -36,4 +37,10 @@ public interface ReleaseManager {
      * @return 发布单简要信息列表
      */
     List<SimpleReleaseOrderDto> queryReleaseOrderListBySprintId(String sprintId);
+
+    /**
+     * 分页查询所有发布单简要信息列表
+     * @param pageNum 页号
+     */
+    Map<String, Object> queryPageOfReleaseOrder(int pageNum);
 }

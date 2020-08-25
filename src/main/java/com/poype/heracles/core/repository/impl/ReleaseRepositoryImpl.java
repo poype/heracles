@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Repository("releaseRepository")
@@ -76,7 +75,22 @@ public class ReleaseRepositoryImpl implements ReleaseRepository {
     @Override
     public List<SimpleReleaseOrderDto> queryReleaseOrderListBySprintId(String sprintId) {
         List<ReleaseOrderDO> releaseOrderDOList = releaseDAO.queryBySprintId(sprintId);
+        return convertDtoList(releaseOrderDOList);
+    }
 
+    @Override
+    public List<SimpleReleaseOrderDto> queryPageOfReleaseOrder(int pageNum) {
+        int offset = (pageNum - 1) * 10;
+        List<ReleaseOrderDO> releaseOrderDOList = releaseDAO.queryPage(offset);
+        return convertDtoList(releaseOrderDOList);
+    }
+
+    @Override
+    public int queryTotal() {
+        return releaseDAO.queryTotal();
+    }
+
+    private List<SimpleReleaseOrderDto> convertDtoList(List<ReleaseOrderDO> releaseOrderDOList) {
         List<SimpleReleaseOrderDto> dtoList = new ArrayList<>();
         for (ReleaseOrderDO orderDO : releaseOrderDOList) {
             SimpleReleaseOrderDto dto = new SimpleReleaseOrderDto(
@@ -87,7 +101,7 @@ public class ReleaseRepositoryImpl implements ReleaseRepository {
                     ReleaseOrderStatus.getByCode(orderDO.getStatus()).getName(),
                     orderDO.getOperator(),
                     orderDO.getReleaseDate()
-                    );
+            );
             dtoList.add(dto);
         }
         return dtoList;

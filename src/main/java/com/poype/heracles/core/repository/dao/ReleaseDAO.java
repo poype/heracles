@@ -25,4 +25,8 @@ public interface ReleaseDAO {
     void updateReleaseItemStatus(@Param("itemId") String itemId, @Param("status") int status);
 
     List<ReleaseOrderDO> queryBySprintId(@Param("sprintId") String sprintId);
+
+    List<ReleaseOrderDO> queryPage(@Param("offset") int offset);
+
+    int queryTotal();
 }

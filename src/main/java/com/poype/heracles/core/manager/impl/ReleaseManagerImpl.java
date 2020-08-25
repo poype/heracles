@@ -19,7 +19,9 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service("releaseManager")
 public class ReleaseManagerImpl implements ReleaseManager {
@@ -87,5 +89,16 @@ public class ReleaseManagerImpl implements ReleaseManager {
     @Override
     public List<SimpleReleaseOrderDto> queryReleaseOrderListBySprintId(String sprintId) {
         return releaseRepository.queryReleaseOrderListBySprintId(sprintId);
+    }
+
+    @Override
+    public Map<String, Object> queryPageOfReleaseOrder(int pageNum) {
+        List<SimpleReleaseOrderDto> dtoList = releaseRepository.queryPageOfReleaseOrder(pageNum);
+        int total = releaseRepository.queryTotal();
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("releaseOrderList", dtoList);
+        map.put("total", total);
+        return map;
     }
 }

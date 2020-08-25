@@ -14,4 +14,8 @@ public interface ReleaseRepository {
     ReleaseOrder queryByOrderId(String orderId);
 
     List<SimpleReleaseOrderDto> queryReleaseOrderListBySprintId(String sprintId);
+
+    List<SimpleReleaseOrderDto> queryPageOfReleaseOrder(int pageNum);
+
+    int queryTotal();
 }

@@ -48,6 +48,14 @@
         select * from release_order where sprint_id = #{sprintId}
     </select>
 
+    <select id="queryPage" resultMap="release_order_result_map">
+        select * from release_order limit #{offset}, 10;
+    </select>
+
+    <select id="queryTotal" resultType="java.lang.Integer">
+        select count(*) from release_order
+    </select>
+
     <update id="updateReleaseOrderStatus">
         update release_order set status = #{status} where order_id = #{orderId}
     </update>
